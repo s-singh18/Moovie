@@ -19,6 +19,7 @@ const customDarkTheme = darkTheme({
   colors: {
     primaryButtonBg: "#d4af37",
     primaryButtonText: "white",
+    connectedButtonBg: "#d4af37",
   },
 });
 
@@ -57,7 +58,7 @@ const Header = () => {
         </Col>
         <Col>
           {/* <Button variant="dark">Login</Button> */}
-          <ConnectWallet theme={customDarkTheme} switchToActiveChain={true} />
+          <ConnectWallet theme={customDarkTheme} />
         </Col>
       </Navbar>
     </Row>

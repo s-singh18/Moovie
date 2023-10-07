@@ -36,13 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-/* Add these styles to make the input oval-shaped */
-.search-form {
-  display: flex;
-  align-items: center;
-}
-
-.oval-input {
-  border-radius: 30px; /* Adjust the border-radius to control the oval shape */
-}
