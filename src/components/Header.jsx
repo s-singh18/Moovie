@@ -9,7 +9,18 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { BsSearch } from "react-icons/bs";
+
+import { darkTheme } from "@thirdweb-dev/react";
+import { ConnectWallet } from "@thirdweb-dev/react";
 import moovieLogo from "../moovie_logo.png";
+
+const customDarkTheme = darkTheme({
+  fontFamily: "Inter, sans-serif",
+  colors: {
+    primaryButtonBg: "#d4af37",
+    primaryButtonText: "white",
+  },
+});
 
 const Header = () => {
   return (
@@ -45,7 +56,8 @@ const Header = () => {
           </InputGroup>
         </Col>
         <Col>
-          <Button variant="dark">Login</Button>
+          {/* <Button variant="dark">Login</Button> */}
+          <ConnectWallet theme={customDarkTheme} switchToActiveChain={true} />
         </Col>
       </Navbar>
     </Row>
