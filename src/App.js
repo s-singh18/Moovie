@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Ethereum, Polygon, Arbitrum } from "@thirdweb-dev/chains";
-
-import Header from "./components/Header";
+import { Feed, Header } from "./components";
+import "./App.css";
 
 const App = () => {
   return (
@@ -15,6 +15,9 @@ const App = () => {
       <BrowserRouter>
         <Container fluid="true">
           <Header />
+          <Routes>
+            <Route exact path="/" element={<Feed />} />
+          </Routes>
         </Container>
       </BrowserRouter>
     </ThirdwebProvider>

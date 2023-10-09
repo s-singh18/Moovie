@@ -12,7 +12,6 @@ import { BsSearch } from "react-icons/bs";
 
 import { darkTheme } from "@thirdweb-dev/react";
 import { ConnectWallet } from "@thirdweb-dev/react";
-import moovieLogo from "../moovie_logo.png";
 
 const customDarkTheme = darkTheme({
   fontFamily: "Inter, sans-serif",
@@ -30,7 +29,7 @@ const Header = () => {
         <Col>
           <Navbar.Brand href="/">
             <img
-              src={moovieLogo}
+              src="/images/moovie-logo.png"
               height="100px"
               alt="Moovie"
               className="d-inline-block align-top"
@@ -43,7 +42,6 @@ const Header = () => {
               placeholder="Search"
               aria-label="Search"
               aria-describedby="basic-addon2"
-              hasValidation="true"
               size="sm"
               style={{ outline: "none" }}
             />
