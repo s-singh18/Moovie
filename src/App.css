@@ -59,3 +59,69 @@ html {
   height: 75%;
   scroll-snap-align: start;
 }
+
+/* Video footer css */
+.videoFooter {
+  position: relative;
+  color: white;
+  bottom: 100px;
+  margin-left: 20px;
+  display: flex;
+}
+
+.videoFooter__text {
+  flex: 1;
+}
+
+.videoFooter__text > p {
+  padding-bottom: 10px;
+}
+
+.videoFooter__record {
+  animation: spinTheRecord infinite 5s linear;
+  height: 50px;
+  filter: invert(1);
+  position: absolute;
+  bottom: 0;
+  right: 0px;
+}
+
+.videoFooter__icon {
+  position: relative;
+}
+
+.videoFooter__ticker > .ticker {
+  height: fit-content;
+  margin-left: 30px;
+  width: 60%;
+}
+
+.videoFooter__text > h3 {
+  padding-bottom: 20px;
+}
+
+.videoFooter__ticker h1 {
+  padding-top: 7px;
+}
+
+@keyframes spinTheRecord {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Video Card Sidebar */
+.videoSidebar {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  color: white;
+}
+
+.videoSidebar__button {
+  padding: 10px;
+  text-align: center;
+}

@@ -1,29 +1,18 @@
 import React, { useState } from "react";
 import { Stack, Row, Col, Card, Button } from "react-bootstrap";
 
-import logo from "../logo.svg";
-
 import VideoCard from "./VideoCard";
+import VideoCardSidebar from "./VideoCardSidebar";
+import { Link } from "react-router-dom";
 
-const Videos = () => {
-  const videos = [
-    {
-      id: 1,
-      title: "Video 1",
-      url: "/videos/tiktok-vid-1.mp4",
-      user: "User1",
-    },
-    { id: 2, title: "Video 2", url: "/videos/yt-short-1.mp4", user: "User2" },
-    { id: 3, title: "Video 3", url: "/videos/yt-short-2.mp4", user: "User3" },
-    // Add more video objects as needed
-  ];
+const Videos = ({ videos }) => {
   return (
     <Stack className="mt-4 align-items-center">
-      {videos.map((video) => (
+      {videos.map(({ id, title, url, channel }) => (
         <Row
-          key={video.id}
+          key={id}
           style={{
-            width: "600px",
+            width: "800px",
             position: "relative",
             overflow: "hidden",
             scrollSnapType: "y mandatory",
@@ -40,16 +29,30 @@ const Videos = () => {
           <Col
             style={{
               height: "800px",
-              width: "80%",
+              width: "65%",
               maxWidth: "600px",
             }}
           >
-            <h4 className="mb-0">{video.user}</h4>
+            <h4 className="mb-0">
+              <Link
+                style={{ color: "white", textDecoration: "none" }}
+                to={channel ? `/channel/${channel}` : `/channel/0`}
+              >
+                {channel}
+              </Link>
+            </h4>
             <p>
-              <span>{video.title}</span>
+              <span>{title}</span>
             </p>
-            <VideoCard title={video.title} url={video.url} />
+            <VideoCard id={id} title={title} url={url} channel={channel} />
           </Col>
+          {/* <Col xs={1} style={{ padding: "0px" }}>
+              <VideoCardSidebar
+                likes={likes}
+                comments={comments}
+                shares={shares}
+              />
+            </Col> */}
         </Row>
       ))}
     </Stack>

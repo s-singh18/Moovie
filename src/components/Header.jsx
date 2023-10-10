@@ -16,16 +16,16 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 const customDarkTheme = darkTheme({
   fontFamily: "Inter, sans-serif",
   colors: {
-    primaryButtonBg: "#d4af37",
-    primaryButtonText: "white",
-    connectedButtonBg: "#d4af37",
+    primaryButtonBg: "#FDD600",
+    primaryButtonText: "black",
+    connectedButtonBg: "#FDD600",
   },
 });
 
 const Header = () => {
   return (
     <Row>
-      <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
+      <Navbar color="black" expand="lg" variant="dark" sticky="top">
         <Col>
           <Navbar.Brand href="/">
             <img
@@ -36,8 +36,8 @@ const Header = () => {
             />
           </Navbar.Brand>
         </Col>
-        <Col xs={8}>
-          <InputGroup className="d-flex m-auto w-50">
+        <Col xs={7}>
+          <InputGroup className="d-flex w-50 m-auto">
             <Form.Control
               placeholder="Search"
               aria-label="Search"
@@ -56,7 +56,20 @@ const Header = () => {
         </Col>
         <Col>
           {/* <Button variant="dark">Login</Button> */}
-          <ConnectWallet theme={customDarkTheme} />
+          <Button
+            variant="outline-light"
+            style={{ borderColor: "#FDD600" }}
+            href="/upload"
+          >
+            Upload
+          </Button>
+        </Col>
+        <Col>
+          {/* <Button variant="dark">Login</Button> */}
+          <ConnectWallet
+            theme={customDarkTheme}
+            style={{ fontWeight: "bold" }}
+          />
         </Col>
       </Navbar>
     </Row>

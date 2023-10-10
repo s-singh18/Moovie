@@ -2,18 +2,19 @@ import React, { useRef, useState } from "react";
 import VideoCardFooter from "./VideoCardFooter";
 
 import { Card } from "react-bootstrap";
+import VideoCardSidebar from "./VideoCardSidebar";
 
-const VideoCard = ({ title, url }) => {
-  const [playing, setPlaying] = useState(false);
+const VideoCard = ({ id, title, url, channel }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
 
   const onVideoClick = () => {
-    if (playing) {
+    if (isPlaying) {
       videoRef.current.pause();
-      setPlaying(false);
+      setIsPlaying(false);
     } else {
       videoRef.current.play();
-      setPlaying(true);
+      setIsPlaying(true);
     }
   };
 
@@ -37,7 +38,7 @@ const VideoCard = ({ title, url }) => {
         onClick={onVideoClick}
         loop
       />
-      <VideoCardFooter />
+      {/* <VideoCardFooter creator={creator} title={title} song={song} /> */}
     </Card>
   );
 };
