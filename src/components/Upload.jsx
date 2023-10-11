@@ -21,7 +21,7 @@ const Upload = () => {
   };
 
   const connectIrys = async () => {
-    const irys = await getIrys("matic");
+    const irys = await getIrys("ethereum");
     setIrys(irys);
     console.log(irys);
 
