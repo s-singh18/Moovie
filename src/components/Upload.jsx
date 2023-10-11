@@ -1,64 +1,69 @@
-// import { WebIrys } from "@irys/sdk";
-import IRYS_NODE from "../App.js";
-
 import { ethers } from "ethers";
 import React, { useState, useEffect } from "react";
 
-import { getIrys } from "../utils/getIrys.js";
-
-// import getWebIrys from "../utils/getWebIrys";
+import getIrys from "../utils/getIrys.js";
+// import getIrysNodeBalance from "../utils/getIrysNodeBalance.js";
+import getRpcUrl from "../utils/getRpcUrl";
 
 const Upload = () => {
   const [account, setAccount] = useState("");
-  const [webIrys, setWebIrys] = useState("");
+  const [irys, setIrys] = useState("");
+  const [irysNodeBalance, setIrysNodeBalance] = useState("");
 
-  //   const getWebIrys = async () => {
-  //     // Ethers5 provider
-  //     await window.ethereum.enable();
-  //     const provider = new providers.Web3Provider(window.ethereum);
+  const getAccount = async () => {
+    let accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+      params: [],
+    });
 
-  //     const url = "https://node1.irys.xyz";
-  //     const token = "matic";
-  //     const rpcURL = "https://rpc-mumbai.maticvigil.com"; // Optional parameter
+    const account = ethers.utils.getAddress(accounts[0]).toString();
+    setAccount(account);
+  };
 
-  //     // Create a wallet object
-  //     const wallet = { rpcUrl: rpcURL, name: "ethersv5", provider: provider };
-  //     // Use the wallet object
-  //     const webIrys = new WebIrys({ url, token, wallet });
-  //     await webIrys.ready();
+  const connectIrys = async () => {
+    const irys = await getIrys("matic");
+    setIrys(irys);
+    console.log(irys);
 
-  //     return webIrys;
-  //   };
+    const atomicBalance = await irys.getLoadedBalance();
+    console.log(`Node balance (atomic units) = ${atomicBalance}`);
+
+    // Convert balance to standard
+    const convertedBalance = irys.utils.fromAtomic(atomicBalance);
+    console.log(`Node balance (converted) = ${convertedBalance}`);
+    setIrysNodeBalance(convertedBalance.toString());
+    return convertedBalance;
+
+    return irys;
+  };
+
+  window.onload = async () => {
+    await getAccount();
+  };
 
   window.ethereum.on(
     "accountsChanged",
     async () => {
-      let accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-        params: [],
-      });
-
-      const account = ethers.utils.getAddress(accounts[0]).toString();
-      setAccount(account);
+      await getAccount();
     },
     []
   );
 
   useEffect(() => {
     if (account) {
-      //   const webIrys = getWebIrys();
-      //   setWebIrys(webIrys);
-      //   console.log(webIrys);
-      console.log("WebIrys connect");
+      connectIrys();
     } else {
-      console.log("Connect account");
+      getAccount();
     }
   }, [account]);
 
   return (
     <div>
       {account ? (
-        <p>Account connected: {account}</p>
+        <div>
+          <p>Account connected: {account}</p>
+          <p>Node balance: {irysNodeBalance}</p>
+        </div>
       ) : (
         <p>Account not connected</p>
       )}

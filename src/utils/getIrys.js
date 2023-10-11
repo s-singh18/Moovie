@@ -4,11 +4,11 @@ import { ethers } from "ethers";
 import BigNumber from "bignumber.js";
 import getRpcUrl from "./getRpcUrl";
 
-const getIrys = async (
-  url = process.env.PUBLIC_NODE || "",
-  token = process.env.PUBLIC_TOKEN || ""
-) => {
-  await window.ethereum.enable();
+const url = "https://devnet.irys.xyz";
+const TOKEN = "matic";
+
+const getIrys = async (token = TOKEN || "") => {
+  console.log("Token: ", token);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const rpcURL = getRpcUrl("token");
   const wallet = { rpcUrl: rpcURL, name: "ethersv5", provider: provider };
