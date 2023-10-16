@@ -41,6 +41,10 @@ html {
   scroll-snap-type: y mandatory;
 }
 
+p {
+  color: white;
+}
+
 /* Custom classes */
 /* Videos */
 .app-videos {

@@ -17,7 +17,7 @@ const customDarkTheme = darkTheme({
   fontFamily: "Inter, sans-serif",
   colors: {
     primaryButtonBg: "#FDD600",
-    primaryButtonText: "black",
+    primaryButtonText: "white",
     connectedButtonBg: "#FDD600",
   },
 });

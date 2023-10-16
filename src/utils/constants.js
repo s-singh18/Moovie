@@ -61,3 +61,33 @@ export const footerList3 = [
   "Creator Portal",
   "Community Guidelines",
 ];
+
+export const irysNodes = {
+  devnet: "https://devnet.irys.xyz",
+  node1: "https://node1.irys.xyz",
+  node2: "https://node2.irys.xyz",
+};
+
+export const currentIrysNode = irysNodes["devnet"];
+
+export const rpcURLs = {
+  matic: "https://rpc-mumbai.maticvigil.com",
+  arbitrum: "https://arb1.arbitrum.io/rpc",
+  avalanche: "https://api.avax.network/ext/bc/C/rpc",
+  ethereum: "https://rpc.sepolia.dev",
+  fantom: "https://rpcapi.fantom.network",
+  near: "https://rpc.mainnet.near.org",
+  solana: "https://api.mainnet-beta.solana.com",
+};
+
+export const chainAlias = {
+  1: "ethereum", // ethereum mainnet
+  137: "matic", // polygon mainnet
+  42161: "arbitrum", // arbitrum
+  11155111: "ethereum", // sepolia
+  80001: "matic", // mumbai
+  421613: "arbitrum", // arbitrum goerli
+};
+
+export const testnetChains = new Set(["11155111", "80001", "421613"]);
+export const mainnetChains = new Set(["1", "137", "42161"]);

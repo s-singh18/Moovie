@@ -42,7 +42,7 @@ const Videos = ({ videos }) => {
               </Link>
             </h4>
             <p>
-              <span>{title}</span>
+              <span style={{ color: "white" }}>{title}</span>
             </p>
             <VideoCard id={id} title={title} url={url} channel={channel} />
           </Col>

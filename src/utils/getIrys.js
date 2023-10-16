@@ -1,16 +1,17 @@
 import { WebIrys } from "@irys/sdk";
 import { ethers } from "ethers";
 
-import BigNumber from "bignumber.js";
-import getRpcUrl from "./getRpcUrl";
+// import BigNumber from "bignumber.js";
 
-const url = "https://devnet.irys.xyz";
-const TOKEN = "matic";
+import { rpcURLs, currentIrysNode } from "./constants";
 
-const getIrys = async (token = TOKEN || "") => {
+// const URL = currentIrysNode;
+// const TOKEN = "matic";
+
+const getIrys = async ({ url, token }) => {
   console.log("Token: ", token);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const rpcURL = getRpcUrl("token");
+  const rpcURL = rpcURLs[token];
   const wallet = { rpcUrl: rpcURL, name: "ethersv5", provider: provider };
   const webIrys = new WebIrys({ url, token, wallet });
   await webIrys.ready();
