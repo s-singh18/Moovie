@@ -16,7 +16,7 @@ import {
   Mumbai,
   ArbitrumGoerli,
 } from "@thirdweb-dev/chains";
-import { Channel, Feed, Header, Upload } from "./components";
+import { Feed, Header, Upload, User } from "./components";
 import "./App.css";
 
 import { useDispatch } from "react-redux";
@@ -43,12 +43,12 @@ function App() {
     const irys = await loadIrys(node, token, dispatch);
     const balance = await loadBalance(irys, dispatch);
 
-    // console.log("App.js Provider: ", provider);
-    // console.log("App.js Chain ID: ", chainId);
+    console.log("App.js Provider: ", provider);
+    console.log("App.js Chain ID: ", chainId);
 
-    // console.log("App.js Token: ", token);
-    // console.log("App.js Node: ", node);
-    // console.log("App.js Irys: ", irys);
+    console.log("App.js Token: ", token);
+    console.log("App.js Node: ", node);
+    console.log("App.js Irys: ", irys);
 
     // Reload page when network changes
     // window.ethereum.on("chainChanged", () => {
@@ -110,7 +110,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Feed />} />
             <Route exact path="/upload" element={<Upload />} />
-            <Route exact path="/channel/:id" element={<Channel />} />
+            <Route exact path="/user/:id" element={<User />} />
           </Routes>
         </BrowserRouter>
       </Container>

@@ -1,33 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Stack, Row, Col, Card, Button, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
 import Videos from "./Videos";
+import queryIrys from "../utils/queryIrys";
+import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
-const channel = "User1";
+const User = () => {
+  const [videos, setVideos] = useState([]);
+  const location = useLocation();
 
-const VIDEOS = [
-  {
-    id: 1,
-    title: "Video 1",
-    channel: "User1",
-    url: "/videos/tiktok-vid-1.mp4",
-  },
-  {
-    id: 2,
-    title: "Video 2",
-    url: "/videos/yt-short-1.mp4",
-    channel: "User2",
-  },
-  {
-    id: 3,
-    title: "Video 3",
-    url: "/videos/yt-short-2.mp4",
-    channel: "User3",
-  },
-  // Add more video objects as needed
-];
+  const currentRoute = location.pathname;
+  const myArray = currentRoute.split("/");
+  const user = myArray[2];
+  console.log(user);
 
-const Channel = () => {
+  const getVideos = async () => {
+    const videos = await queryIrys();
+    setVideos(videos);
+    return videos;
+  };
+
+  useEffect(() => {
+    try {
+      getVideos();
+    } catch (error) {
+      console.log("Error loading video data", error);
+    }
+  }, []);
+
   return (
     <Stack className="align-items-center">
       <Row style={{ marginTop: "20px", marginBottom: "20px", width: "25%" }}>
@@ -36,7 +37,7 @@ const Channel = () => {
             className="rounded-circle shadow-4-strong"
             style={{ height: "60px", width: "60px" }}
             alt="avatar1"
-            src={"https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"}
+            src="/images/Asset-2.svg"
           />
         </Col>
         <Col
@@ -49,9 +50,9 @@ const Channel = () => {
           <h4 className="mb-0">
             <Link
               style={{ color: "white", textDecoration: "none" }}
-              to={channel ? `/channel/${channel}` : `/channel/0`}
+              to={`/user/${user}`}
             >
-              {channel}
+              {shortenEthereumAddress(user)}
             </Link>
           </h4>
         </Col>
@@ -67,10 +68,10 @@ const Channel = () => {
         </Nav>
       </Row>
       <Row style={{ width: "50%" }}>
-        <Videos videos={VIDEOS} />
+        <Videos videos={videos} />
       </Row>
     </Stack>
   );
 };
 
-export default Channel;
+export default User;

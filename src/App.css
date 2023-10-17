@@ -13,6 +13,37 @@
   }
 }
 
+.black-background {
+  background-color: black;
+  color: black;
+}
+
+@media (prefers-color-scheme: black-background) {
+  .black-background.adaptive {
+    background: black;
+    color: black;
+    outline: 5px dotted #000;
+  }
+}
+
+/* For webkit-based browsers */
+::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: black; /* Set the color of the thumb (the draggable part) */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Set the color of the track (the non-draggable part) */
+}
+
+/* If you want to style the scrollbar on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: black; /* Change the color on hover */
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

@@ -4,18 +4,25 @@ import { Stack, Row, Col, Card, Button } from "react-bootstrap";
 import VideoCard from "./VideoCard";
 import VideoCardSidebar from "./VideoCardSidebar";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
 const Videos = ({ videos }) => {
+  const node = useSelector((state) => state.irys.node);
+
   return (
     <Stack className="mt-4 align-items-center">
-      {videos.map(({ id, title, url, channel }) => (
+      {console.log("Videos: ", videos)}
+      {videos.map((video) => (
         <Row
-          key={id}
+          key={video.id}
           style={{
             width: "800px",
             position: "relative",
             overflow: "hidden",
             scrollSnapType: "y mandatory",
+            objectFit: "contain",
           }}
         >
           <Col xs={1} style={{ marginRight: "20px" }}>
@@ -23,7 +30,7 @@ const Videos = ({ videos }) => {
               className="rounded-circle shadow-4-strong"
               style={{ height: "60px", width: "60px" }}
               alt="avatar1"
-              src={"https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"}
+              src="/images/Asset-2.svg"
             />
           </Col>
           <Col
@@ -36,15 +43,20 @@ const Videos = ({ videos }) => {
             <h4 className="mb-0">
               <Link
                 style={{ color: "white", textDecoration: "none" }}
-                to={channel ? `/channel/${channel}` : `/channel/0`}
+                to={`/user/${video.address}`}
               >
-                {channel}
+                {shortenEthereumAddress(video.address)}
               </Link>
             </h4>
             <p>
-              <span style={{ color: "white" }}>{title}</span>
+              <span style={{ color: "white" }}>{video.title}</span>
+              {console.log("URL: ", node + "/" + video.id)}
             </p>
-            <VideoCard id={id} title={title} url={url} channel={channel} />
+            <VideoCard
+              id={video.id}
+              title={video.title}
+              url={node + "/" + video.id}
+            />
           </Col>
           {/* <Col xs={1} style={{ padding: "0px" }}>
               <VideoCardSidebar

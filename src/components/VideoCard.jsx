@@ -4,7 +4,7 @@ import VideoCardFooter from "./VideoCardFooter";
 import { Card } from "react-bootstrap";
 import VideoCardSidebar from "./VideoCardSidebar";
 
-const VideoCard = ({ id, title, url, channel }) => {
+const VideoCard = ({ id, title, url }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
 

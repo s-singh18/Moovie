@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Videos } from "./";
 import queryIrys from "../utils/queryIrys";
@@ -26,12 +26,26 @@ import getIrys from "../utils/getIrys";
 // ];
 
 const Feed = () => {
-  const [results, setResults] = useState([]);
+  const [videos, setVideos] = useState([]);
+
+  const getVideos = async () => {
+    const videos = await queryIrys();
+    setVideos(videos);
+    return videos;
+  };
+
+  useEffect(() => {
+    try {
+      getVideos();
+    } catch (error) {
+      console.log("Error loading video data", error);
+    }
+  }, []);
 
   return (
     <Row>
       <Col>
-        <Videos videos={results} />
+        <Videos videos={videos} />
       </Col>
     </Row>
   );
