@@ -8,8 +8,8 @@ import { useSelector } from "react-redux";
 
 import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
-const Videos = ({ videos }) => {
-  const node = useSelector((state) => state.irys.node);
+const Videos = ({ videos, node }) => {
+  // const node = useSelector((state) => state.irys.node);
 
   return (
     <Stack className="mt-4 align-items-center">
@@ -48,13 +48,13 @@ const Videos = ({ videos }) => {
                 {shortenEthereumAddress(video.address)}
               </Link>
             </h4>
-            <p>
-              <span style={{ color: "white" }}>{video.title}</span>
-              {console.log("URL: ", node + "/" + video.id)}
-            </p>
+            <h6>
+              <span style={{ color: "white" }}>{video.tags[2]["value"]}</span>
+              {console.log("Title: ", video.tags[2]["value"])}
+            </h6>
             <VideoCard
               id={video.id}
-              title={video.title}
+              title={video.tags[2].title}
               url={node + "/" + video.id}
             />
           </Col>

@@ -5,7 +5,6 @@ import getIrys from "../utils/getIrys.js";
 import BigNumber from "bignumber.js";
 import ClipLoader from "react-spinners/ClipLoader";
 // import fundNode from "../utils/fundNode.js";
-// import queryIrys from "../utils/queryIrys.js";
 // import uploadVideo from "../utils/uploadVideo.js";
 import { Stack, Row, Form, Button, Col } from "react-bootstrap";
 import {
@@ -16,7 +15,7 @@ import {
 } from "../utils/constants.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loadBalance } from "../store/interactions.js";
-// import queryIrys from "../utils/queryIrys.js";
+import { storeUpdate } from "../utils/storeVideoTx.js";
 
 const Upload = () => {
   const [nodeBalance, setNodeBalance] = useState("");
@@ -40,6 +39,7 @@ const Upload = () => {
   const dispatch = useDispatch();
 
   const handleFileChange = async (e) => {
+    e.preventDefault();
     const selectedFile = e.target.files[0];
     setSelectedFile(selectedFile);
 
@@ -82,17 +82,6 @@ const Upload = () => {
     loadBalance(irys, dispatch);
   };
 
-  const getBalance = async ({ irys }) => {
-    // Get balance
-    const atomicBalance = await irys.getLoadedBalance();
-    console.log(`Node balance (atomic units) = ${atomicBalance}`);
-
-    // Convert balance to standard
-    const convertedBalance = irys.utils.fromAtomic(atomicBalance);
-    console.log(`Node balance (converted) = ${convertedBalance}`);
-    setNodeBalance(convertedBalance.toString());
-  };
-
   const uploadVideo = async () => {
     console.log("Video upload Irys", irys);
     console.log("Video upload fileToUpload", selectedFile);
@@ -110,8 +99,12 @@ const Upload = () => {
     try {
       console.log("Tags: ", tags);
       const receipt = await irys.uploadFile(selectedFile, { tags });
-      alert(`File uploaded ==> https://gateway.irys.xyz/${receipt.id}`);
 
+      const txId = await storeUpdate(receipt.id, irys, node);
+      console.log("Updated list tx: ", txId);
+
+      alert(`File uploaded ==> https://gateway.irys.xyz/${receipt.id}`);
+      window.location.href = "/upload";
       return receipt;
     } catch (e) {
       setUploading(false);

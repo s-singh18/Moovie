@@ -34,31 +34,29 @@ function App() {
   const dispatch = useDispatch();
 
   const loadBlockchainData = async () => {
-    const provider = await loadProvider(dispatch);
-    const chainId = await loadNetwork(provider, dispatch);
-    const account = await loadAccount(dispatch);
+    let provider;
+    let chainId;
+    let account;
 
-    const token = await loadToken(chainId, dispatch);
-    const node = await loadNode(chainId, dispatch);
-    const irys = await loadIrys(node, token, dispatch);
-    const balance = await loadBalance(irys, dispatch);
+    let token;
+    let node;
+    let irys;
+    let balance;
+    try {
+      const provider = await loadProvider(dispatch);
+      const chainId = await loadNetwork(provider, dispatch);
+      const account = await loadAccount(dispatch);
 
-    console.log("App.js Provider: ", provider);
-    console.log("App.js Chain ID: ", chainId);
-
-    console.log("App.js Token: ", token);
-    console.log("App.js Node: ", node);
-    console.log("App.js Irys: ", irys);
-
-    // Reload page when network changes
-    // window.ethereum.on("chainChanged", () => {
-    //   window.location.reload();
-    // });
-
-    // Fetch current account from Metamask when changed
-    // window.ethereum.on("accountsChanged", async () => {
-    //   await loadAccount(dispatch);
-    // });
+      const token = await loadToken(chainId, dispatch);
+      const node = await loadNode(chainId, dispatch);
+      const irys = await loadIrys(node, token, dispatch);
+      const balance = await loadBalance(irys, dispatch);
+    } catch (error) {
+      // If error set to sepolia and default to devnet
+      const chainId = 11155111;
+      const token = await loadToken(chainId, dispatch);
+      const node = await loadNode(chainId, dispatch);
+    }
   };
 
   window.onload = async () => {

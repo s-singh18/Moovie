@@ -3,6 +3,8 @@ import { Row, Col } from "react-bootstrap";
 import { Videos } from "./";
 import queryIrys from "../utils/queryIrys";
 import getIrys from "../utils/getIrys";
+import { queryFeed } from "../utils/queryLibrary";
+import { useSelector } from "react-redux";
 
 // const VIDEOS = [
 //   {
@@ -27,9 +29,11 @@ import getIrys from "../utils/getIrys";
 
 const Feed = () => {
   const [videos, setVideos] = useState([]);
+  const node = useSelector((state) => state.irys.node);
+  console.log("Node: ", node);
 
   const getVideos = async () => {
-    const videos = await queryIrys();
+    const videos = await queryFeed(node);
     setVideos(videos);
     return videos;
   };
@@ -40,12 +44,12 @@ const Feed = () => {
     } catch (error) {
       console.log("Error loading video data", error);
     }
-  }, []);
+  }, [node]);
 
   return (
     <Row>
       <Col>
-        <Videos videos={videos} />
+        <Videos videos={videos} node={node} />
       </Col>
     </Row>
   );
