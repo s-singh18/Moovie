@@ -93,7 +93,7 @@ function App() {
 
   return (
     <ThirdwebProvider
-      activeChain="polygon"
+      activeChain="mumbai"
       supportedChains={[
         Ethereum,
         Polygon,
