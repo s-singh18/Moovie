@@ -49,7 +49,7 @@ const Feed = () => {
   return (
     <Row>
       <Col>
-        <Videos videos={videos} node={node} />
+        <Videos videos={videos} />
       </Col>
     </Row>
   );
