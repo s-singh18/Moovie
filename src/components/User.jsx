@@ -7,6 +7,8 @@ import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 import { Web3Button } from "@thirdweb-dev/react";
 import { useAddress } from "@thirdweb-dev/react";
 import { useContract } from "@thirdweb-dev/react";
+import { useSelector } from "react-redux";
+import { queryUser } from "../utils/queryLibrary";
 
 const User = () => {
   const [videos, setVideos] = useState([]);
