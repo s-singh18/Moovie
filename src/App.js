@@ -9,12 +9,12 @@ import {
 import Container from "react-bootstrap/Container";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import {
-  Ethereum,
-  Polygon,
-  Arbitrum,
-  Sepolia,
+  // Ethereum,
+  // Polygon,
+  // Arbitrum,
+  // Sepolia,
+  // ArbitrumGoerli,
   Mumbai,
-  ArbitrumGoerli,
 } from "@thirdweb-dev/chains";
 import { Feed, Header, Upload, User } from "./components";
 import "./App.css";
@@ -53,7 +53,7 @@ function App() {
       const balance = await loadBalance(irys, dispatch);
     } catch (error) {
       // If error set to sepolia and default to devnet
-      const chainId = 11155111;
+      const chainId = 80001;
       const token = await loadToken(chainId, dispatch);
       const node = await loadNode(chainId, dispatch);
     }
@@ -93,12 +93,12 @@ function App() {
     <ThirdwebProvider
       activeChain="mumbai"
       supportedChains={[
-        Ethereum,
-        Polygon,
-        Arbitrum,
-        Sepolia,
+        // Ethereum,
+        // Polygon,
+        // Arbitrum,
+        // Sepolia,
+        // ArbitrumGoerli,
         Mumbai,
-        ArbitrumGoerli,
       ]}
       clientId={`${process.env.THIRDWEB_CLIENT_ID}`}
     >

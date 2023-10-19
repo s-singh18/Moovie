@@ -4,7 +4,7 @@ export const provider = createSlice({
   name: "provider",
   initialState: {
     provider: null,
-    chainId: null,
+    chainId: 80001, // Default to matic mumbai
     account: null,
   },
   reducers: {

@@ -14,6 +14,10 @@ import { useAddress } from "@thirdweb-dev/react";
 import { useContract } from "@thirdweb-dev/react";
 import { darkTheme } from "@thirdweb-dev/react";
 import { ConnectWallet } from "@thirdweb-dev/react";
+import config from "../config.json";
+import { loadProvider } from "../store/interactions";
+import { useSelector } from "react-redux";
+import MOOVIE_TIER_NFT_ABI from "../abi/MoovieTierNFT.json";
 
 const customDarkTheme = darkTheme({
   fontFamily: "Inter, sans-serif",
@@ -25,9 +29,15 @@ const customDarkTheme = darkTheme({
 });
 
 const Header = () => {
+  const provider = useSelector((state) => state.provider.provider);
+  const chainId = useSelector((state) => state.provider.chainId);
+
   const address = useAddress();
+  console.log("Chain id: ", chainId);
+  console.log("Config chainId: ", config[chainId]);
   const { contract, isLoading, error } = useContract(
-    "0xcB12466e687a29DAF18926f35042384fdB81Da35"
+    config[`${chainId}`].moovieTierNFT.address,
+    MOOVIE_TIER_NFT_ABI
   );
 
   return (
@@ -71,7 +81,11 @@ const Header = () => {
         Upload
       </Button>
       {/* <Button variant="dark">Login</Button> */}
-      <ConnectWallet theme={customDarkTheme} style={{ fontWeight: "bold" }} />
+      <ConnectWallet
+        theme={customDarkTheme}
+        style={{ fontWeight: "bold" }}
+        switchToActiveChain={true}
+      />
     </Navbar>
   );
 };

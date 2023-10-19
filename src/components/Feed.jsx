@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Videos } from "./";
-import queryIrys from "../utils/queryIrys";
 import getIrys from "../utils/getIrys";
 import { queryFeed } from "../utils/queryLibrary";
 import { useSelector } from "react-redux";

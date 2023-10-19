@@ -48,18 +48,18 @@ export const queryTransaction = async (node, transactions, contentType) => {
   }
 };
 
-export const queryUser = async (node, user) => {
+export const queryUserFeed = async (node, user) => {
   try {
     const myQuery = new Query({ url: `${node}/graphql` });
-    const results = await myQuery
-      .search("irys:transactions")
-      .from(user.toLowerCase())
-      .tags([
-        { name: "Content-Type", values: ["video/mp4"] },
-        { name: "application-id", values: ["Moovie"] },
-      ]);
+    let userResults = [];
+    const results = await queryFeed(node);
+    results.map((result) => {
+      if (result.address === user.toLowerCase()) {
+        userResults.push(result);
+      }
+    });
 
-    return results;
+    return userResults;
   } catch (e) {
     console.log("User query error", e);
   }
