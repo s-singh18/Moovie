@@ -21,7 +21,7 @@ const User = () => {
   const user = myArray[2];
   const address = useAddress() ?? "";
   const { contract, isLoading, error } = useContract(
-    "0x9EF1aFaF0571222C5C89A988224Bddfa82E6D028"
+    "0xcB12466e687a29DAF18926f35042384fdB81Da35"
   );
   const [showMint, setShowMint] = useState(false);
 
@@ -102,7 +102,7 @@ const User = () => {
         {showMint && (
           <Col>
             <Web3Button
-              contractAddress="0x9EF1aFaF0571222C5C89A988224Bddfa82E6D028"
+              contractAddress="0xcB12466e687a29DAF18926f35042384fdB81Da35"
               contractAbi={[
                 {
                   inputs: [],
