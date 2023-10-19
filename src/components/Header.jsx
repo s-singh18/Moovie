@@ -27,59 +27,52 @@ const customDarkTheme = darkTheme({
 const Header = () => {
   const address = useAddress();
   const { contract, isLoading, error } = useContract(
-    "0x9EF1aFaF0571222C5C89A988224Bddfa82E6D028"
+    "0xcB12466e687a29DAF18926f35042384fdB81Da35"
   );
 
   return (
-    <Row>
-      <Navbar color="black" expand="lg" variant="dark" sticky="top">
-        <Col>
-          <Navbar.Brand href="/">
-            <img
-              src="/images/moovie-logo.png"
-              height="100px"
-              alt="Moovie"
-              className="d-inline-block align-top"
-            />
-          </Navbar.Brand>
-        </Col>
-        <Col xs={7}>
-          <InputGroup className="d-flex w-50 m-auto">
-            <Form.Control
-              placeholder="Search"
-              aria-label="Search"
-              aria-describedby="basic-addon2"
-              size="sm"
-              style={{ outline: "none" }}
-            />
-            <Button
-              variant="outline-secondary"
-              id="button-addon2"
-              enable-rounded="true"
-            >
-              <BsSearch />
-            </Button>
-          </InputGroup>
-        </Col>
-        <Col>
-          {/* <Button variant="dark">Login</Button> */}
-          <Button
-            variant="outline-light"
-            style={{ borderColor: "#FDD600" }}
-            href="/upload"
-          >
-            Upload
-          </Button>
-        </Col>
-        <Col>
-          {/* <Button variant="dark">Login</Button> */}
-          <ConnectWallet
-            theme={customDarkTheme}
-            style={{ fontWeight: "bold" }}
-          />
-        </Col>
-      </Navbar>
-    </Row>
+    <Navbar
+      color="black"
+      expand="md"
+      variant="dark"
+      sticky="top"
+      style={{ backgroundColor: "black" }}
+    >
+      <Navbar.Brand href="/">
+        <img
+          src="/images/moovie-logo.png"
+          height="100px"
+          alt="Moovie"
+          className="d-inline-block align-top"
+        />
+      </Navbar.Brand>
+      <InputGroup className="d-flex w-25 m-auto justify-content-center">
+        <Form.Control
+          placeholder="Search"
+          aria-label="Search"
+          aria-describedby="basic-addon2"
+          size="sm"
+          style={{ outline: "none" }}
+        />
+        <Button
+          variant="outline-secondary"
+          id="button-addon2"
+          enable-rounded="true"
+        >
+          <BsSearch />
+        </Button>
+      </InputGroup>
+      {/* <Button variant="dark">Login</Button> */}
+      <Button
+        variant="outline-light"
+        style={{ borderColor: "#FDD600" }}
+        href="/upload"
+      >
+        Upload
+      </Button>
+      {/* <Button variant="dark">Login</Button> */}
+      <ConnectWallet theme={customDarkTheme} style={{ fontWeight: "bold" }} />
+    </Navbar>
   );
 };
 

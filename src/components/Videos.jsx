@@ -8,8 +8,8 @@ import { useSelector } from "react-redux";
 
 import { shortenEthereumAddress } from "../utils/shortenEthereumAddress";
 
-const Videos = ({ videos, node }) => {
-  // const node = useSelector((state) => state.irys.node);
+const Videos = ({ videos }) => {
+  const node = useSelector((state) => state.irys.node);
 
   return (
     <Stack className="mt-4 align-items-center">

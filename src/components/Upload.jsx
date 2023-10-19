@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadBalance } from "../store/interactions.js";
 import { storeUpdate } from "../utils/storeVideoTx.js";
 
+const tiers = ["Tier1", "Tier2", "Tier3"];
+
 const Upload = () => {
   const [nodeBalance, setNodeBalance] = useState("");
 
@@ -24,6 +26,7 @@ const Upload = () => {
   const [price, setPrice] = useState(0);
   const [fundAmount, setFundAmount] = useState(0);
   const [title, setTitle] = useState("");
+  const [tier, setTier] = useState("");
   const [nodeURL, setNodeURL] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -44,7 +47,6 @@ const Upload = () => {
     setSelectedFile(selectedFile);
 
     const price = await irys.getPrice(selectedFile.size);
-    console.log(`Price: ${price}`);
     setPrice(irys.utils.fromAtomic(price));
   };
 
@@ -201,7 +203,6 @@ const Upload = () => {
                   // onChange={(e) => setSelectedFile(e.target.files[0])}
                   onChange={handleFileChange}
                 />
-                {console.log("Selected File", selectedFile)}
               </Form.Group>
 
               <Form.Group className="mb-2" controlId="titleInput">
@@ -213,6 +214,20 @@ const Upload = () => {
                 />
               </Form.Group>
 
+              <Form.Group
+                className="mb-2"
+                controlId="tierInput"
+                onChange={(e) => setTier(e.target.value)}
+              >
+                <Form.Select>
+                  <option>Select Tier</option>
+                  {tiers.map((tier) => (
+                    <option key={tier} value={tier}>
+                      {tier}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
               <Button
                 style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
                 variant="primary"
