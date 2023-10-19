@@ -11,13 +11,15 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
         // Store position for efficient deletion
         uint256 indexInCreatorList;
         string name;
+        string newTransactionId;
+        string oldTransactionId;
     }
 
     mapping(uint256 tierID => Tier) public tiers;
     mapping(address creator => uint256[] tierIDs) public creatorToTierIDs;
 
     modifier onlyTierOwner(uint256 tierID) {
-        require(tiers[tierID].creator == msg.sender, "Only owner can execute this function");
+        require(tiers[tierID].creator == msg.sender, "Only tier creator can execute this function");
         _;
     }
 
@@ -32,7 +34,9 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
             creator: msg.sender,
             price: price,
             indexInCreatorList: creatorToTierIDs[msg.sender].length,
-            name: name
+            name: name,
+            newTransactionId: "",
+            oldTransactionId: ""
         });
 
         creatorToTierIDs[msg.sender].push(newTierID);
@@ -64,6 +68,14 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
 
     function changeTierPrice(uint256 tierID, uint256 price) external onlyTierOwner(tierID) {
         tiers[tierID].price = price;
+    }
+
+    function changeTransactionIds(uint256 tierID, string memory _newTransactionId, string memory _oldTransactionId)
+        external
+        onlyTierOwner(tierID)
+    {
+        tiers[tierID].newTransactionId = _newTransactionId;
+        tiers[tierID].oldTransactionId = _oldTransactionId;
     }
 
     function setTierTokenURI(uint256 tierID, string memory tokenURI) external onlyTierOwner(tierID) {
