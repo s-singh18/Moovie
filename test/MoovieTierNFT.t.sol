@@ -16,6 +16,8 @@ contract MoovieTierNFTTest is Test {
         // Store position for efficient deletion
         uint256 indexInCreatorList;
         string name;
+        bytes32 newTransactionId;
+        bytes32 oldTransactionId;
     }
 
     string constant DEFAULT_URI = "https://ipfs.io/ipfs/bafkreib2aqiu6u74ct3ulnw7bdy7c4sdxhzh6bohk7gkt56mqb2shhz25a";
@@ -57,7 +59,7 @@ contract MoovieTierNFTTest is Test {
         moovieTierNFT.createTier(price, name);
 
         uint256[] memory creatorTierIDsBefore = moovieTierNFT.getCreatorTierIDs(ALICE);
-        (address creatorBefore, uint256 priceBefore,, string memory nameBefore) =
+        (address creatorBefore, uint256 priceBefore,, string memory nameBefore,,) =
             moovieTierNFT.tiers(creatorTierIDsBefore[0]);
 
         assertEq(creatorBefore, ALICE);
@@ -67,7 +69,7 @@ contract MoovieTierNFTTest is Test {
         moovieTierNFT.deleteTier(creatorTierIDsBefore[0]);
 
         uint256[] memory creatorTierIDsAfter = moovieTierNFT.getCreatorTierIDs(ALICE);
-        (address creatorAfter, uint256 priceAfter,, string memory nameAfter) =
+        (address creatorAfter, uint256 priceAfter,, string memory nameAfter,,) =
             moovieTierNFT.tiers(creatorTierIDsAfter[0]);
 
         assertEq(creatorAfter, address(0));
@@ -86,7 +88,7 @@ contract MoovieTierNFTTest is Test {
 
         uint256[] memory creatorTierIDs = moovieTierNFT.getCreatorTierIDs(ALICE);
 
-        vm.expectRevert("Only owner can execute this function");
+        vm.expectRevert("Only tier creator can execute this function");
 
         vm.prank(BOB);
 
@@ -168,7 +170,7 @@ contract MoovieTierNFTTest is Test {
 
         moovieTierNFT.changeTierName(creatorTierIDs[0], newName);
 
-        (,,, string memory nameAfter) = moovieTierNFT.tiers(creatorTierIDs[0]);
+        (,,, string memory nameAfter,,) = moovieTierNFT.tiers(creatorTierIDs[0]);
 
         assertEq(nameAfter, newName);
 
@@ -188,7 +190,7 @@ contract MoovieTierNFTTest is Test {
 
         vm.prank(BOB);
 
-        vm.expectRevert("Only owner can execute this function");
+        vm.expectRevert("Only tier creator can execute this function");
 
         moovieTierNFT.changeTierName(creatorTierIDs[0], newName);
     }
@@ -205,7 +207,7 @@ contract MoovieTierNFTTest is Test {
 
         moovieTierNFT.changeTierPrice(creatorTierIDs[0], newPrice);
 
-        (, uint256 priceAfter,,) = moovieTierNFT.tiers(creatorTierIDs[0]);
+        (, uint256 priceAfter,,,,) = moovieTierNFT.tiers(creatorTierIDs[0]);
 
         assertEq(newPrice, priceAfter);
 
@@ -224,9 +226,54 @@ contract MoovieTierNFTTest is Test {
 
         vm.prank(BOB);
 
-        vm.expectRevert("Only owner can execute this function");
+        vm.expectRevert("Only tier creator can execute this function");
 
         moovieTierNFT.changeTierPrice(creatorTierIDs[0], newPrice);
+    }
+
+    function testChangeTransactionIds(
+        uint256 price,
+        string memory name,
+        string memory newTransactionId,
+        string memory oldTransactionId
+    ) external {
+        vm.assume(bytes(name).length > 0);
+
+        vm.startPrank(ALICE);
+
+        moovieTierNFT.createTier(price, name);
+
+        uint256[] memory creatorTierIDs = moovieTierNFT.getCreatorTierIDs(ALICE);
+
+        moovieTierNFT.changeTransactionIds(creatorTierIDs[0], newTransactionId, oldTransactionId);
+
+        (,,,, string memory newTransactionIdAfter, string memory oldTransactionIdAfter) = moovieTierNFT.tiers(creatorTierIDs[0]);
+
+        assertEq(newTransactionId, newTransactionIdAfter);
+        assertEq(oldTransactionId, oldTransactionIdAfter);
+
+        vm.stopPrank();
+    }
+
+    function testRevertChangeTransactionIdsNotCreator(
+        uint256 price,
+        string memory name,
+        string memory newTransactionId,
+        string memory oldTransactionId
+    ) external {
+        vm.assume(bytes(name).length > 0);
+
+        vm.prank(ALICE);
+
+        moovieTierNFT.createTier(price, name);
+
+        uint256[] memory creatorTierIDs = moovieTierNFT.getCreatorTierIDs(ALICE);
+
+        vm.prank(BOB);
+
+        vm.expectRevert("Only tier creator can execute this function");
+
+        moovieTierNFT.changeTransactionIds(creatorTierIDs[0], newTransactionId, oldTransactionId);
     }
 
     function testSetTierTokenURI(uint256 price, string memory name, string memory tokenURI) external {
@@ -262,7 +309,7 @@ contract MoovieTierNFTTest is Test {
 
         vm.prank(BOB);
 
-        vm.expectRevert("Only owner can execute this function");
+        vm.expectRevert("Only tier creator can execute this function");
 
         moovieTierNFT.setTierTokenURI(creatorTierIDs[0], tokenURI);
     }
