@@ -39,13 +39,13 @@ const User = () => {
   const user = myArray[2];
 
   console.log("Contract Account: ", moovieTierNFTContract);
-  const [showMint, setShowMint] = useState(false);
+  const [showVideoFeed, setShowVideoFeed] = useState(true);
 
   const handleNavLinkSelect = (key) => {
-    if (key === "link-2") {
-      setShowMint(true);
+    if (key === "videoFeed") {
+      setShowVideoFeed(true);
     } else {
-      setShowMint(false);
+      setShowVideoFeed(false);
     }
   };
 
@@ -65,13 +65,14 @@ const User = () => {
   };
 
   const getCreatorTierIDs = async () => {
-    console.log(`Handle Create Tier, ${tierName}, ${tierPrice}`);
     try {
-      const data = await moovieTierNFTContract.getCreatorTierIDs(account);
+      const data = await moovieTierNFTContract.getCreatorTierIDs(user);
       let tiers = [];
       // console.log("Moovie Tiers: ", moovieTierNFTContract.tiers);
       data.map(async (id) => {
-        tiers.push(await moovieTierNFTContract.tiers(id.toNumber()));
+        const idNum = id.toNumber();
+        const tier = await moovieTierNFTContract.tiers(idNum);
+        tiers.push([idNum, tier]);
       });
       setTiers(tiers);
     } catch (error) {
@@ -182,9 +183,10 @@ const User = () => {
           // fill
           variant="tabs"
           onSelect={(selectedKey) => handleNavLinkSelect(selectedKey)}
+          defaultActiveKey="videoFeed"
         >
-          <Nav.Item>
-            <Nav.Link eventKey="link-1" style={{ color: "#FDD600" }}>
+          <Nav.Item key="videoFeed">
+            <Nav.Link eventKey="videoFeed" style={{ color: "#FDD600" }}>
               Videos
             </Nav.Link>
           </Nav.Item>
@@ -193,13 +195,9 @@ const User = () => {
             `Account Tier1 Name: ${tiers[0]}, Account Tier1 Price: ${tiers[0]}  `
           )}
           {tiers &&
-            tiers.map((tier) => (
-              <Nav.Item>
-                <Nav.Link
-                  key={tier.indexInCreatorList.toNumber()}
-                  eventKey={tier.indexInCreatorList.toNumber()}
-                  style={{ color: "#FDD600" }}
-                >
+            tiers.map(([tierId, tier]) => (
+              <Nav.Item key={tierId}>
+                <Nav.Link eventKey={tierId} style={{ color: "#FDD600" }}>
                   {tier.name}
                 </Nav.Link>
               </Nav.Item>
@@ -207,7 +205,20 @@ const User = () => {
         </Nav>
       </Row>
       <Row style={{ width: "50%" }}>
-        <Videos videos={videos ?? []} />
+        {showVideoFeed ? (
+          <Videos videos={videos ?? []} />
+        ) : (
+          <>
+            <Button
+              variant="primary"
+              // onClick={handleCreateTier}
+              className="m-auto mt-2 w-25"
+              style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
+            >
+              Mint Tier
+            </Button>
+          </>
+        )}
       </Row>
     </Stack>
   );
