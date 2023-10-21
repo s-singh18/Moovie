@@ -31,6 +31,7 @@ const User = () => {
   const [tierName, setTierName] = useState("");
   const [tierPrice, setTierPrice] = useState("");
   const [tiers, setTiers] = useState([]);
+  const [tierIds, setTierIds] = useState([]);
 
   const contractAccount = account ? account.toLowerCase() : "";
   const location = useLocation();
@@ -68,12 +69,17 @@ const User = () => {
     try {
       const data = await moovieTierNFTContract.getCreatorTierIDs(user);
       let tiers = [];
-      // console.log("Moovie Tiers: ", moovieTierNFTContract.tiers);
-      data.map(async (id) => {
-        const idNum = id.toNumber();
-        const tier = await moovieTierNFTContract.tiers(idNum);
-        tiers.push([idNum, tier]);
+      let tierIds = [];
+      data.map((id) => {
+        tierIds.push(id.toNumber());
       });
+      setTierIds(tierIds);
+
+      for (const id in tierIds) {
+        console.log("Id: ", tierIds[id]);
+        const tier = await moovieTierNFTContract.tiers(tierIds[id]);
+        tiers.push(tier);
+      }
       setTiers(tiers);
     } catch (error) {
       console.log("Get creator tiers error \n", error);
@@ -190,14 +196,12 @@ const User = () => {
               Videos
             </Nav.Link>
           </Nav.Item>
+          {console.log("Tier Ids: ", tierIds)}
           {console.log("Account Tiers: ", tiers)}
-          {console.log(
-            `Account Tier1 Name: ${tiers[0]}, Account Tier1 Price: ${tiers[0]}  `
-          )}
           {tiers &&
-            tiers.map(([tierId, tier]) => (
-              <Nav.Item key={tierId}>
-                <Nav.Link eventKey={tierId} style={{ color: "#FDD600" }}>
+            tiers.map((tier, index) => (
+              <Nav.Item key={index}>
+                <Nav.Link eventKey={index} style={{ color: "#FDD600" }}>
                   {tier.name}
                 </Nav.Link>
               </Nav.Item>
