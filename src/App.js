@@ -24,6 +24,7 @@ import {
   loadAccount,
   loadBalance,
   loadIrys,
+  loadMoovieTierNFT,
   loadNetwork,
   loadNode,
   loadProvider,
@@ -51,8 +52,11 @@ function App() {
       const node = await loadNode(chainId, dispatch);
       const irys = await loadIrys(node, token, dispatch);
       const balance = await loadBalance(irys, dispatch);
+
+      // Switch 80001 with chainId
+      const moovieTierNFT = await loadMoovieTierNFT(provider, 80001, dispatch);
     } catch (error) {
-      // If error set to sepolia and default to devnet
+      // If error set to mumbai and default to devnet
       const chainId = 80001;
       const token = await loadToken(chainId, dispatch);
       const node = await loadNode(chainId, dispatch);

@@ -39,7 +39,9 @@
     "reselect": "^4.1.6",
     "stream": "^0.0.2",
     "web-vitals": "^2.1.4",
-    "zlib": "npm:browserify-zlib"
+    "zlib": "npm:browserify-zlib",
+    "url": "latest",
+    "assert": "^2.0.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

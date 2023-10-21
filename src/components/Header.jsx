@@ -9,15 +9,10 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { BsSearch } from "react-icons/bs";
-import { Web3Button } from "@thirdweb-dev/react";
 import { useAddress } from "@thirdweb-dev/react";
-import { useContract } from "@thirdweb-dev/react";
 import { darkTheme } from "@thirdweb-dev/react";
 import { ConnectWallet } from "@thirdweb-dev/react";
-import config from "../config.json";
-import { loadProvider } from "../store/interactions";
 import { useSelector } from "react-redux";
-import MOOVIE_TIER_NFT_ABI from "../abi/MoovieTierNFT.json";
 
 const customDarkTheme = darkTheme({
   fontFamily: "Inter, sans-serif",
@@ -33,12 +28,6 @@ const Header = () => {
   const chainId = useSelector((state) => state.provider.chainId);
 
   const address = useAddress();
-  console.log("Chain id: ", chainId);
-  console.log("Config chainId: ", config[chainId]);
-  const { contract, isLoading, error } = useContract(
-    config[`${chainId}`].moovieTierNFT.address,
-    MOOVIE_TIER_NFT_ABI
-  );
 
   return (
     <Navbar

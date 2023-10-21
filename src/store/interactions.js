@@ -4,6 +4,10 @@ import getIrys from "../utils/getIrys.js";
 import { setAccount, setNetwork, setProvider } from "./reducers/provider";
 import { chainAlias, irysNodes, mainnetChains } from "../utils/constants.js";
 import { setBalance, setIrys, setNode, setToken } from "./reducers/irys.js";
+import { setMoovieTierNFTContract } from "./reducers/moovieTierNFT.js";
+
+import config from "../config.json";
+import MOOVIE_TIER_NFT_ABI from "../abi/MoovieTierNFT.json";
 
 export const loadProvider = async (dispatch) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -62,4 +66,17 @@ export const loadBalance = async (irys, dispatch) => {
   const convertedBalance = irys.utils.fromAtomic(atomicBalance).toString();
   dispatch(setBalance(convertedBalance));
   return convertedBalance;
+};
+
+// ---------------------------------------------------------------------------------
+// LOAD moovieTierNFT
+export const loadMoovieTierNFT = async (provider, chainId, dispatch) => {
+  const moovieTierNFT = new ethers.Contract(
+    config[chainId].moovieTierNFT.address,
+    MOOVIE_TIER_NFT_ABI,
+    provider
+  );
+
+  dispatch(setMoovieTierNFTContract(moovieTierNFT));
+  return moovieTierNFT;
 };
