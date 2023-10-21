@@ -23,9 +23,9 @@ import { useDispatch } from "react-redux";
 import {
   loadAccount,
   loadBalance,
+  loadChainId,
   loadIrys,
   loadMoovieTierNFT,
-  loadNetwork,
   loadNode,
   loadProvider,
   loadToken,
@@ -35,32 +35,18 @@ function App() {
   const dispatch = useDispatch();
 
   const loadBlockchainData = async () => {
-    let provider;
-    let chainId;
-    let account;
+    const provider = await loadProvider(dispatch);
+    const chainId = await loadChainId(provider, dispatch);
+    const account = await loadAccount(dispatch);
 
-    let token;
-    let node;
-    let irys;
-    let balance;
-    try {
-      const provider = await loadProvider(dispatch);
-      const chainId = await loadNetwork(provider, dispatch);
-      const account = await loadAccount(dispatch);
+    const token = await loadToken(chainId, dispatch);
+    const node = await loadNode(chainId, dispatch);
+    const irys = await loadIrys(provider, node, token, dispatch);
 
-      const token = await loadToken(chainId, dispatch);
-      const node = await loadNode(chainId, dispatch);
-      const irys = await loadIrys(node, token, dispatch);
-      const balance = await loadBalance(irys, dispatch);
+    const balance = await loadBalance(irys, dispatch);
 
-      // Switch 80001 with chainId
-      const moovieTierNFT = await loadMoovieTierNFT(provider, 80001, dispatch);
-    } catch (error) {
-      // If error set to mumbai and default to devnet
-      const chainId = 80001;
-      const token = await loadToken(chainId, dispatch);
-      const node = await loadNode(chainId, dispatch);
-    }
+    const moovieTierNFT = await loadMoovieTierNFT(provider, chainId, dispatch);
+    // console.log("App MoovieTierNFT: ", moovieTierNFT);
   };
 
   window.onload = async () => {

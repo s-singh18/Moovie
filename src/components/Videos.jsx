@@ -30,7 +30,7 @@ const Videos = ({ videos }) => {
               className="rounded-circle shadow-4-strong"
               style={{ height: "60px", width: "60px" }}
               alt="avatar1"
-              src="/images/Asset-2.svg"
+              src="/images/m-logo.png"
             />
           </Col>
           <Col

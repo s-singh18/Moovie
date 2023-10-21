@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Row, Col, Card, Button, Nav } from "react-bootstrap";
+import { Stack, Row, Col, Card, Button, Nav, Form } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 
 import Videos from "./Videos";
@@ -15,22 +15,30 @@ import config from "../config.json";
 
 const User = () => {
   const provider = useSelector((state) => state.provider.provider);
-  const chainId = useSelector((state) => state.provider.chainId);
+  const chainId = useSelector((state) => state.provider.chainId) ?? 80001;
+  const account = useSelector((state) => state.provider.account);
+
+  const token = useSelector((state) => state.irys.token);
+  const node = useSelector((state) => state.irys.node);
+  const irys = useSelector((state) => state.irys.irys);
+  const balance = useSelector((state) => state.irys.balance);
+
+  const moovieTierNFTContract = useSelector(
+    (state) => state.moovieTierNFT.contract
+  );
 
   const [videos, setVideos] = useState([]);
+  const [tierName, setTierName] = useState("");
+  const [tierPrice, setTierPrice] = useState("");
+  const [tiers, setTiers] = useState([]);
+
+  const contractAccount = account ? account.toLowerCase() : "";
   const location = useLocation();
-
-  const node = useSelector((state) => state.irys.node);
-
   const currentRoute = location.pathname;
   const myArray = currentRoute.split("/");
   const user = myArray[2];
-  const address = useAddress() ?? "";
-  const { contract, isLoading, error } = useContract(
-    config[`${chainId}`].moovieTierNFT.address,
-    MOOVIE_TIER_NFT_ABI
-  );
-  console.log("Contract: ", contract);
+
+  console.log("Contract Account: ", moovieTierNFTContract);
   const [showMint, setShowMint] = useState(false);
 
   const handleNavLinkSelect = (key) => {
@@ -38,6 +46,36 @@ const User = () => {
       setShowMint(true);
     } else {
       setShowMint(false);
+    }
+  };
+
+  const handleCreateTier = async () => {
+    console.log(`Handle Create Tier, ${tierName}, ${tierPrice}`);
+    try {
+      if (tierName !== "" && tierPrice >= 0) {
+        const signer = await provider.getSigner();
+        const data = await moovieTierNFTContract
+          .connect(signer)
+          .createTier(tierPrice, tierName);
+      }
+      window.location.href = `/user/${user}`;
+    } catch (error) {
+      console.log("Create tier error", error);
+    }
+  };
+
+  const getCreatorTierIDs = async () => {
+    console.log(`Handle Create Tier, ${tierName}, ${tierPrice}`);
+    try {
+      const data = await moovieTierNFTContract.getCreatorTierIDs(account);
+      let tiers = [];
+      // console.log("Moovie Tiers: ", moovieTierNFTContract.tiers);
+      data.map(async (id) => {
+        tiers.push(await moovieTierNFTContract.tiers(id.toNumber()));
+      });
+      setTiers(tiers);
+    } catch (error) {
+      console.log("Get creator tiers error \n", error);
     }
   };
 
@@ -50,26 +88,27 @@ const User = () => {
   useEffect(() => {
     try {
       getVideos();
+      getCreatorTierIDs();
     } catch (error) {
       console.log("Error loading video data", error);
     }
-  }, []);
+  }, [node, moovieTierNFTContract]);
 
   return (
     <Stack className="align-items-center">
-      <Row style={{ marginTop: "20px", marginBottom: "20px", width: "25%" }}>
-        <Col xs={2} style={{ marginRight: "20px", padding: "0px" }}>
+      <Row style={{ marginTop: "20px", marginBottom: "20px", width: "50%" }}>
+        <Col xs={1} style={{ marginRight: "0px", padding: "0px" }}>
           <img
             className="rounded-circle shadow-4-strong"
             style={{ height: "60px", width: "60px" }}
             alt="avatar1"
-            src="/images/Asset-2.svg"
+            src="/images/m-logo.png"
           />
         </Col>
         <Col
           xs={2}
           style={{
-            width: "65%",
+            width: "40%",
             maxWidth: "600px",
           }}
         >
@@ -82,10 +121,65 @@ const User = () => {
             </Link>
           </h4>
         </Col>
+        <Col
+          xs={2}
+          style={{
+            width: "40%",
+            maxWidth: "600px",
+          }}
+        >
+          {!account ? (
+            <Button
+              variant="primary"
+              // onClick={handleCreateTier}
+              disabled
+              className="mb-2"
+              style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
+            >
+              Mint Tier
+            </Button>
+          ) : contractAccount === user ? (
+            <Form>
+              <Form.Group className="mb-2 mr-sm-2 w-50">
+                <Form.Control
+                  type="text"
+                  id="tierName"
+                  placeholder="Tier Name"
+                  value={tierName}
+                  onChange={(e) => setTierName(e.target.value)}
+                />
+                <Form.Control
+                  type="number"
+                  id="tierPrice"
+                  placeholder="Tier Price"
+                  value={tierPrice}
+                  onChange={(e) => setTierPrice(e.target.value)}
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                onClick={handleCreateTier}
+                className="mb-2"
+                style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
+              >
+                Create Tier
+              </Button>
+            </Form>
+          ) : (
+            <Button
+              variant="primary"
+              // onClick={handleCreateTier}
+              className="mb-2"
+              style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
+            >
+              Mint Tier
+            </Button>
+          )}
+        </Col>
       </Row>
       <Row style={{ width: "50%" }}>
         <Nav
-          fill
+          // fill
           variant="tabs"
           onSelect={(selectedKey) => handleNavLinkSelect(selectedKey)}
         >
@@ -94,32 +188,26 @@ const User = () => {
               Videos
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="link-2" style={{ color: "#FDD600" }}>
-              Exclusives
-            </Nav.Link>
-          </Nav.Item>
+          {console.log("Account Tiers: ", tiers)}
+          {console.log(
+            `Account Tier1 Name: ${tiers[0]}, Account Tier1 Price: ${tiers[0]}  `
+          )}
+          {tiers &&
+            tiers.map((tier) => (
+              <Nav.Item>
+                <Nav.Link
+                  key={tier.indexInCreatorList.toNumber()}
+                  eventKey={tier.indexInCreatorList.toNumber()}
+                  style={{ color: "#FDD600" }}
+                >
+                  {tier.name}
+                </Nav.Link>
+              </Nav.Item>
+            ))}
         </Nav>
       </Row>
-      {!showMint && (
-        <Row style={{ width: "50%" }}>
-          <Videos videos={videos} />
-        </Row>
-      )}
       <Row style={{ width: "50%" }}>
-        {showMint && (
-          <Col>
-            <Web3Button
-              contractAddress={config[`${chainId}`].moovieTierNFT.address}
-              contractAbi={MOOVIE_TIER_NFT_ABI}
-              action={() => {
-                contract.call("mint", [1, 1]);
-              }}
-            >
-              Mint Tier
-            </Web3Button>
-          </Col>
-        )}
+        <Videos videos={videos ?? []} />
       </Row>
     </Stack>
   );

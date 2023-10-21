@@ -16,6 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { loadBalance } from "../store/interactions.js";
 import { storeUpdate } from "../utils/storeVideoTx.js";
+import { shortenEthereumAddress } from "../utils/shortenEthereumAddress.js";
 
 const tiers = ["Tier1", "Tier2", "Tier3"];
 
@@ -140,7 +141,7 @@ const Upload = () => {
                 <h3 style={{ color: "white" }}>Video Upload</h3>
               </div>
 
-              <p>Account connected: {account}</p>
+              <p>Account connected: {shortenEthereumAddress(account)}</p>
               <Row>
                 <Col>
                   <p>Node balance: {balance}</p>

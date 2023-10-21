@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import getIrys from "../utils/getIrys.js";
 
-import { setAccount, setNetwork, setProvider } from "./reducers/provider";
+import { setAccount, setChainId, setProvider } from "./reducers/provider";
 import { chainAlias, irysNodes, mainnetChains } from "../utils/constants.js";
 import { setBalance, setIrys, setNode, setToken } from "./reducers/irys.js";
 import { setMoovieTierNFTContract } from "./reducers/moovieTierNFT.js";
@@ -11,34 +11,43 @@ import MOOVIE_TIER_NFT_ABI from "../abi/MoovieTierNFT.json";
 
 export const loadProvider = async (dispatch) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+
   dispatch(setProvider(provider));
 
   return provider;
 };
 
-export const loadNetwork = async (provider, dispatch) => {
-  const { chainId } = await provider.getNetwork();
-  dispatch(setNetwork(chainId));
-
+export const loadChainId = async (provider, dispatch) => {
+  const defaultChainId = 80001; // mumbai
+  const { chainId } = (await provider.getNetwork()) ?? defaultChainId;
+  dispatch(setChainId(chainId));
   return chainId;
 };
 
 export const loadAccount = async (dispatch) => {
-  let accounts = await window.ethereum.request({
-    method: "eth_requestAccounts",
-    params: [],
-  });
-
-  const account = ethers.utils.getAddress(accounts[0]).toString();
-  dispatch(setAccount(account));
-  return account;
+  let account;
+  try {
+    console.log("Window ethereum: ", window.ethereum);
+    if (typeof window.ethereum !== "undefined") {
+      let accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+        params: [],
+      });
+      account = ethers.utils.getAddress(accounts[0]).toString();
+    }
+  } catch (error) {
+    account = "";
+  } finally {
+    dispatch(setAccount(account));
+    return account;
+  }
 };
 
 // ---------------------------------------------------------------------------------
 // LOAD IRYS
 
-export const loadIrys = async (url, token, dispatch) => {
-  const irys = await getIrys({ url, token });
+export const loadIrys = async (provider, url, token, dispatch) => {
+  const irys = await getIrys({ provider, url, token });
 
   dispatch(setIrys(irys));
   return irys;
@@ -61,11 +70,15 @@ export const loadToken = async (chainId, dispatch) => {
 };
 
 export const loadBalance = async (irys, dispatch) => {
-  const atomicBalance = await irys.getLoadedBalance();
-  // Convert balance to standard
-  const convertedBalance = irys.utils.fromAtomic(atomicBalance).toString();
-  dispatch(setBalance(convertedBalance));
-  return convertedBalance;
+  try {
+    const atomicBalance = await irys.getLoadedBalance();
+    // Convert balance to standard
+    const convertedBalance = irys.utils.fromAtomic(atomicBalance).toString();
+    dispatch(setBalance(convertedBalance));
+    return convertedBalance;
+  } catch (error) {
+    return 0;
+  }
 };
 
 // ---------------------------------------------------------------------------------
