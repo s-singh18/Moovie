@@ -1,11 +1,5 @@
 import { useEffect } from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  HashRouter,
-} from "react-router-dom";
+import { Routes, Route, useLocation, HashRouter } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import {
@@ -93,14 +87,14 @@ function App() {
       clientId={`${process.env.THIRDWEB_CLIENT_ID}`}
     >
       <Container fluid="true" style={{ backgroundColor: "black" }}>
-        <BrowserRouter>
+        <HashRouter>
           <Header />
           <Routes>
             <Route exact path="/" element={<Feed />} />
             <Route exact path="/upload" element={<Upload />} />
             <Route exact path="/user/:id" element={<User />} />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </Container>
     </ThirdwebProvider>
   );
