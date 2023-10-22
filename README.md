@@ -6,6 +6,8 @@ Experience the future of video sharing with Moovie - a revolutionary platform po
 
 For a more in-depth demonstration, watch our [video demo](https://www.loom.com/share/f8ee5b2cb52946918940a63700c29f65?sid=aacbd7d1-4e24-42c1-bc82-2b2b3016b17a).
 
+Also check out our [live demo](https://moovie.on.fleek.co/)
+
 ![Screenshot 1](https://github.com/s-singh18/moovie/assets/65569092/c4c096fa-f8ff-4b1c-880a-ea68b0a7e72b)
 
 ![Screenshot 2](https://github.com/s-singh18/moovie/assets/65569092/636544e6-d035-46f6-be6f-095b482beb0b)
