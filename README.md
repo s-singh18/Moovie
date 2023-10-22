@@ -6,17 +6,21 @@ Experience the future of video sharing with Moovie - a revolutionary platform po
 
 For a more in-depth demonstration, watch our [video demo](https://www.loom.com/share/f8ee5b2cb52946918940a63700c29f65?sid=aacbd7d1-4e24-42c1-bc82-2b2b3016b17a).
 
-![Screenshot 1](https://github.com/s-singh18/moovie/assets/65569092/c03c76df-281f-475c-b7b9-8184dd314994)
+![Screenshot 1](https://github.com/s-singh18/moovie/assets/65569092/c4c096fa-f8ff-4b1c-880a-ea68b0a7e72b)
 
-![Screenshot 2](https://github.com/s-singh18/moovie/assets/65569092/1c205f24-a43d-42bd-be38-814c1f0d0aa2)
+![Screenshot 2](https://github.com/s-singh18/moovie/assets/65569092/636544e6-d035-46f6-be6f-095b482beb0b)
 
-![Screenshot 3](https://github.com/s-singh18/moovie/assets/65569092/105a8618-7bd1-4e5c-8672-56f93f37f5b0)
+![Screenshot 3](https://github.com/s-singh18/moovie/assets/65569092/c03c76df-281f-475c-b7b9-8184dd314994)
 
-![Screenshot 4](https://github.com/s-singh18/moovie/assets/65569092/2d63fe2d-52ca-4e7d-8434-7ac492f26eba)
+![Screenshot 4](https://github.com/s-singh18/moovie/assets/65569092/1c205f24-a43d-42bd-be38-814c1f0d0aa2)
 
-![Screenshot 5](https://github.com/s-singh18/moovie/assets/65569092/636544e6-d035-46f6-be6f-095b482beb0b)
+![Screenshot 5](https://github.com/s-singh18/moovie/assets/65569092/105a8618-7bd1-4e5c-8672-56f93f37f5b0)
 
-![Screenshot 6](https://github.com/s-singh18/moovie/assets/65569092/c4c096fa-f8ff-4b1c-880a-ea68b0a7e72b)
+![Screenshot 6](https://github.com/s-singh18/moovie/assets/65569092/2d63fe2d-52ca-4e7d-8434-7ac492f26eba)
+
+
+
+
 
 ## Table of Contents
 
