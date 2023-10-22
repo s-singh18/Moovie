@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import React, { useState, CSSProperties } from "react";
+import React, { useState, CSSProperties, useEffect } from "react";
 
 import getIrys from "../utils/getIrys.js";
 import BigNumber from "bignumber.js";
@@ -15,7 +15,7 @@ import {
 } from "../utils/constants.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loadBalance } from "../store/interactions.js";
-import { storeUpdate } from "../utils/storeVideoTx.js";
+import { storeUpdate, storeUpdateTier } from "../utils/storeVideoTx.js";
 import { shortenEthereumAddress } from "../utils/shortenEthereumAddress.js";
 
 const tiers = ["Tier1", "Tier2", "Tier3"];
@@ -28,6 +28,9 @@ const Upload = () => {
   const [fundAmount, setFundAmount] = useState(0);
   const [title, setTitle] = useState("");
   const [tier, setTier] = useState("");
+  const [tierId, setTierId] = useState("");
+  const [tiers, setTiers] = useState([]);
+  const [tierIds, setTierIds] = useState([]);
   const [nodeURL, setNodeURL] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -39,6 +42,10 @@ const Upload = () => {
   const node = useSelector((state) => state.irys.node);
   const irys = useSelector((state) => state.irys.irys);
   const balance = useSelector((state) => state.irys.balance);
+
+  const moovieTierNFTContract = useSelector(
+    (state) => state.moovieTierNFT.contract
+  );
 
   const dispatch = useDispatch();
 
@@ -103,7 +110,20 @@ const Upload = () => {
       console.log("Tags: ", tags);
       const receipt = await irys.uploadFile(selectedFile, { tags });
 
-      const txId = await storeUpdate(receipt.id, irys, node);
+      let txId;
+      console.log("Tier compare: ", tier);
+      tier === ""
+        ? (txId = await storeUpdate(receipt.id, irys, node))
+        : (txId = await storeUpdateTier(
+            receipt.id,
+            tierId,
+            tier,
+            irys,
+            node,
+            moovieTierNFTContract,
+            provider
+          ));
+
       console.log("Updated list tx: ", txId);
 
       alert(`File uploaded ==> https://gateway.irys.xyz/${receipt.id}`);
@@ -130,6 +150,43 @@ const Upload = () => {
       alert(`Fund node and upload video error... \n${error}`);
     }
   };
+
+  const getCreatorTierIDs = async () => {
+    try {
+      const data = await moovieTierNFTContract.getCreatorTierIDs(account);
+      let tiers = [];
+      let tierIds = [];
+      data.map((id) => {
+        tierIds.push(id.toNumber());
+      });
+      setTierIds(tierIds);
+
+      for (const id in tierIds) {
+        const tier = await moovieTierNFTContract.tiers(tierIds[id]);
+        tiers.push(tier);
+      }
+      setTiers(tiers);
+    } catch (error) {
+      console.log("Get creator tiers error \n", error);
+    }
+  };
+
+  const handleTier = async (index) => {
+    try {
+      setTier(tiers[index]);
+      setTierId(tierIds[index]);
+    } catch (error) {
+      console.log("Handle tier error", error);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      getCreatorTierIDs();
+    } catch (error) {
+      console.log("Error loading video data", error);
+    }
+  }, [node, moovieTierNFTContract]);
 
   return (
     <div className="h-100 w-100">
@@ -218,15 +275,17 @@ const Upload = () => {
               <Form.Group
                 className="mb-2"
                 controlId="tierInput"
-                onChange={(e) => setTier(e.target.value)}
+                onChange={(e) => handleTier(e.target.value)}
               >
                 <Form.Select>
-                  <option>Select Tier</option>
-                  {tiers.map((tier) => (
-                    <option key={tier} value={tier}>
-                      {tier}
-                    </option>
-                  ))}
+                  <option value="">Select Tier</option>
+                  {console.log("Tier: ", tier)}
+                  {tiers &&
+                    tiers.map((tier, index) => (
+                      <option key={tierIds[index]} value={index}>
+                        {tier.name}
+                      </option>
+                    ))}
                 </Form.Select>
               </Form.Group>
               <Button

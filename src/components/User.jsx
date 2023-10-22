@@ -30,6 +30,8 @@ const User = () => {
   const [videos, setVideos] = useState([]);
   const [tierName, setTierName] = useState("");
   const [tierPrice, setTierPrice] = useState("");
+  const [tier, setTier] = useState([]);
+  const [tierId, setTierId] = useState([]);
   const [tiers, setTiers] = useState([]);
   const [tierIds, setTierIds] = useState([]);
 
@@ -46,6 +48,12 @@ const User = () => {
     if (key === "videoFeed") {
       setShowVideoFeed(true);
     } else {
+      console.log("Key: ", key);
+      setTierId(tierIds[key]);
+      setTier(tiers[key]);
+
+      console.log("Cur Tier: ", tiers[key]);
+      console.log("Cur TierId: ", tierIds[key]);
       setShowVideoFeed(false);
     }
   };
