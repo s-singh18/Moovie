@@ -19,11 +19,18 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
     mapping(address creator => uint256[] tierIDs) public creatorToTierIDs;
 
     modifier onlyTierOwner(uint256 tierID) {
-        require(tiers[tierID].creator == msg.sender, "Only tier creator can execute this function");
+        require(
+            tiers[tierID].creator == msg.sender,
+            "Only tier creator can execute this function"
+        );
         _;
     }
 
-    constructor() ERC1155("https://ipfs.io/ipfs/bafkreib2aqiu6u74ct3ulnw7bdy7c4sdxhzh6bohk7gkt56mqb2shhz25a") { }
+    constructor()
+        ERC1155(
+            "https://ipfs.io/ipfs/bafkreib2aqiu6u74ct3ulnw7bdy7c4sdxhzh6bohk7gkt56mqb2shhz25a"
+        )
+    {}
 
     function createTier(uint256 price, string memory name) external {
         require(bytes(name).length > 0, "Invalid name");
@@ -49,47 +56,63 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
         delete tiers[tierID];
     }
 
-    function getCreatorTierIDs(address creator) external view returns (uint256[] memory creatorTierIDs) {
+    function getCreatorTierIDs(
+        address creator
+    ) external view returns (uint256[] memory creatorTierIDs) {
         return creatorToTierIDs[creator];
     }
 
     function mint(uint256 tierID, uint256 amount) external payable {
         require(tiers[tierID].creator != address(0), "tierID does not exist");
-        require(tiers[tierID].price * amount <= msg.value, "Insufficient mint price sent");
+        // require(tiers[tierID].price * amount <= msg.value, "Insufficient mint price sent");
 
         _mint(msg.sender, tierID, amount, "");
     }
 
-    function changeTierName(uint256 tierID, string memory name) external onlyTierOwner(tierID) {
+    function changeTierName(
+        uint256 tierID,
+        string memory name
+    ) external onlyTierOwner(tierID) {
         require(bytes(name).length > 0, "Invalid name");
 
         tiers[tierID].name = name;
     }
 
-    function changeTierPrice(uint256 tierID, uint256 price) external onlyTierOwner(tierID) {
+    function changeTierPrice(
+        uint256 tierID,
+        uint256 price
+    ) external onlyTierOwner(tierID) {
         tiers[tierID].price = price;
     }
 
-    function changeTransactionIds(uint256 tierID, string memory _newTransactionId, string memory _oldTransactionId)
-        external
-        onlyTierOwner(tierID)
-    {
+    function changeTransactionIds(
+        uint256 tierID,
+        string memory _newTransactionId,
+        string memory _oldTransactionId
+    ) external onlyTierOwner(tierID) {
         tiers[tierID].newTransactionId = _newTransactionId;
         tiers[tierID].oldTransactionId = _oldTransactionId;
     }
 
-    function setTierTokenURI(uint256 tierID, string memory tokenURI) external onlyTierOwner(tierID) {
+    function setTierTokenURI(
+        uint256 tierID,
+        string memory tokenURI
+    ) external onlyTierOwner(tierID) {
         _setURI(tierID, tokenURI);
     }
 
-    function uri(uint256 tierID) public view override(ERC1155, ERC1155URIStorage) returns (string memory) {
+    function uri(
+        uint256 tierID
+    ) public view override(ERC1155, ERC1155URIStorage) returns (string memory) {
         return super.uri(tierID);
     }
 
-    function _update(address from, address to, uint256[] memory ids, uint256[] memory values)
-        internal
-        override(ERC1155, ERC1155Supply)
-    {
+    function _update(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values
+    ) internal override(ERC1155, ERC1155Supply) {
         super._update(from, to, ids, values);
     }
 }

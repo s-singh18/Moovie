@@ -5,34 +5,17 @@ import getIrys from "../utils/getIrys";
 import { queryFeed } from "../utils/queryLibrary";
 import { useSelector } from "react-redux";
 
-// const VIDEOS = [
-//   {
-//     id: 1,
-//     title: "Video 1",
-//     channel: "User1",
-//     url: "/videos/tiktok-vid-1.mp4",
-//   },
-//   {
-//     id: 2,
-//     title: "Video 2",
-//     url: "/videos/yt-short-1.mp4",
-//     channel: "User2",
-//   },
-//   {
-//     id: 3,
-//     title: "Video 3",
-//     url: "/videos/yt-short-2.mp4",
-//     channel: "User3",
-//   },
-// ];
-
 const Feed = () => {
   const [videos, setVideos] = useState([]);
   const node = useSelector((state) => state.irys.node);
   console.log("Node: ", node);
 
-  const getVideos = async () => {
-    const videos = await queryFeed(node);
+  const getVideos = async (rootTx = null, prevTx = null) => {
+    if (rootTx === null && prevTx === null) {
+      rootTx = localStorage.getItem("root-tx");
+      prevTx = localStorage.getItem("prev-tx");
+    }
+    const videos = await queryFeed(node, rootTx, prevTx);
     setVideos(videos);
     return videos;
   };

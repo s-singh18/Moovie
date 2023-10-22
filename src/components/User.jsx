@@ -12,6 +12,7 @@ import { queryUserFeed } from "../utils/queryLibrary";
 
 import MOOVIE_TIER_NFT_ABI from "../abi/MoovieTierNFT.json";
 import config from "../config.json";
+import { ethers } from "ethers";
 
 const User = () => {
   const provider = useSelector((state) => state.provider.provider);
@@ -41,20 +42,54 @@ const User = () => {
   const myArray = currentRoute.split("/");
   const user = myArray[2];
 
-  console.log("Contract Account: ", moovieTierNFTContract);
-  const [showVideoFeed, setShowVideoFeed] = useState(true);
+  const [showVideoMainFeed, setShowVideoMainFeed] = useState(true);
+  const [showVideoTierFeed, setShowVideoTierFeed] = useState(false);
+  const [showMintButton, setShowMintButton] = useState(false);
+  const [userIsAccount, setUserIsAccount] = useState(
+    account && user === account.toLowerCase()
+  );
+  console.log("User is account", userIsAccount);
 
-  const handleNavLinkSelect = (key) => {
-    if (key === "videoFeed") {
-      setShowVideoFeed(true);
+  const handleNavLinkSelect = async (key) => {
+    if (key === "videoMainFeed") {
+      setShowVideoMainFeed(true);
+      getVideos();
     } else {
-      console.log("Key: ", key);
-      setTierId(tierIds[key]);
-      setTier(tiers[key]);
+      setShowVideoMainFeed(false);
+      const curTierId = tierIds[key];
+      const curTier = tiers[key];
+      const rootTx = curTier.oldTransactionId;
+      const prevTx = curTier.newTransactionId;
+      setTierId(curTierId);
+      setTier(curTier);
 
-      console.log("Cur Tier: ", tiers[key]);
-      console.log("Cur TierId: ", tierIds[key]);
-      setShowVideoFeed(false);
+      if (!account) {
+        setShowMintButton(true);
+      } else {
+        const balanceOf = await moovieTierNFTContract.balanceOf(
+          account,
+          curTierId
+        );
+        const balanceOfInt = balanceOf.toNumber();
+
+        if (balanceOfInt > 0) {
+          setShowMintButton(false);
+          const videos = await getVideos(rootTx, prevTx);
+          setVideos(videos);
+        } else {
+          setShowMintButton(true);
+        }
+      }
+    }
+  };
+
+  const handleMintTier = async () => {
+    try {
+      const signer = await provider.getSigner();
+      const data = await moovieTierNFTContract.connect(signer).mint(tierId, 1);
+      console.log(data);
+    } catch (error) {
+      console.log("Handle Mint Error:\n", error);
     }
   };
 
@@ -63,9 +98,10 @@ const User = () => {
     try {
       if (tierName !== "" && tierPrice >= 0) {
         const signer = await provider.getSigner();
+        const ethTierPrice = ethers.utils.parseEther(tierPrice);
         const data = await moovieTierNFTContract
           .connect(signer)
-          .createTier(tierPrice, tierName);
+          .createTier(ethTierPrice, tierName);
       }
       window.location.href = `/user/${user}`;
     } catch (error) {
@@ -94,8 +130,12 @@ const User = () => {
     }
   };
 
-  const getVideos = async () => {
-    const videos = await queryUserFeed(node, user);
+  const getVideos = async (rootTx = null, prevTx = null) => {
+    if (rootTx === null && prevTx === null) {
+      rootTx = localStorage.getItem("root-tx");
+      prevTx = localStorage.getItem("prev-tx");
+    }
+    const videos = await queryUserFeed(node, user, rootTx, prevTx);
     setVideos(videos);
     return videos;
   };
@@ -144,15 +184,7 @@ const User = () => {
           }}
         >
           {!account ? (
-            <Button
-              variant="primary"
-              // onClick={handleCreateTier}
-              disabled
-              className="mb-2"
-              style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
-            >
-              Mint Tier
-            </Button>
+            <></>
           ) : contractAccount === user ? (
             <Form>
               <Form.Group className="mb-2 mr-sm-2 w-50">
@@ -181,14 +213,7 @@ const User = () => {
               </Button>
             </Form>
           ) : (
-            <Button
-              variant="primary"
-              // onClick={handleCreateTier}
-              className="mb-2"
-              style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
-            >
-              Mint Tier
-            </Button>
+            <></>
           )}
         </Col>
       </Row>
@@ -197,10 +222,10 @@ const User = () => {
           // fill
           variant="tabs"
           onSelect={(selectedKey) => handleNavLinkSelect(selectedKey)}
-          defaultActiveKey="videoFeed"
+          defaultActiveKey="videoMainFeed"
         >
-          <Nav.Item key="videoFeed">
-            <Nav.Link eventKey="videoFeed" style={{ color: "#FDD600" }}>
+          <Nav.Item key="videoMainFeed">
+            <Nav.Link eventKey="videoMainFeed" style={{ color: "#FDD600" }}>
               Videos
             </Nav.Link>
           </Nav.Item>
@@ -217,19 +242,23 @@ const User = () => {
         </Nav>
       </Row>
       <Row style={{ width: "50%" }}>
-        {showVideoFeed ? (
+        {showVideoMainFeed ? (
           <Videos videos={videos ?? []} />
-        ) : (
+        ) : !showVideoMainFeed && !showMintButton ? (
+          <Videos videos={videos ?? []} />
+        ) : showMintButton ? (
           <>
             <Button
               variant="primary"
-              // onClick={handleCreateTier}
+              onClick={handleMintTier}
               className="m-auto mt-2 w-25"
               style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
             >
               Mint Tier
             </Button>
           </>
+        ) : (
+          <></>
         )}
       </Row>
     </Stack>

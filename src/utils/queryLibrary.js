@@ -2,11 +2,9 @@ import Query from "@irys/query";
 
 import { currentIrysNode } from "./constants";
 
-export const queryFeed = async (node) => {
+export const queryFeed = async (node, rootTx, prevTx) => {
   try {
     const myQuery = new Query({ url: `${node}/graphql` });
-    const rootTx = localStorage.getItem("root-tx");
-    const prevTx = localStorage.getItem("prev-tx");
 
     console.log("Root-tx: ", rootTx);
     console.log("Prev-tx: ", prevTx);
@@ -48,11 +46,11 @@ export const queryTransaction = async (node, transactions, contentType) => {
   }
 };
 
-export const queryUserFeed = async (node, user) => {
+export const queryUserFeed = async (node, user, rootTx, prevTx) => {
   try {
     const myQuery = new Query({ url: `${node}/graphql` });
     let userResults = [];
-    const results = await queryFeed(node);
+    const results = await queryFeed(node, rootTx, prevTx);
     results.map((result) => {
       if (result.address === user.toLowerCase()) {
         userResults.push(result);
