@@ -6,6 +6,7 @@
   "dependencies": {
     "@irys/query": "^0.0.2",
     "@irys/sdk": "^0.0.3",
+    "@lit-protocol/lit-node-client": "^2.2.61",
     "@mui/icons-material": "^5.14.12",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",
@@ -14,6 +15,7 @@
     "@thirdweb-dev/chains": "^0.1.54",
     "@thirdweb-dev/react": "^3.16.4",
     "@thirdweb-dev/sdk": "^3.10.66",
+    "assert": "^2.0.0",
     "bootstrap": "^5.3.2",
     "browserify-zlib": "^0.2.0",
     "ethers": "^5.7.2",
@@ -24,8 +26,8 @@
     "path": "^0.12.7",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
-    "react-app-rewired": "^2.2.1",
     "react-apexcharts": "^1.4.0",
+    "react-app-rewired": "^2.2.1",
     "react-blockies": "^1.4.1",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
@@ -39,10 +41,9 @@
     "redux-thunk": "^2.4.1",
     "reselect": "^4.1.6",
     "stream": "^0.0.2",
-    "web-vitals": "^2.1.4",
-    "zlib": "npm:browserify-zlib",
     "url": "latest",
-    "assert": "^2.0.0"
+    "web-vitals": "^2.1.4",
+    "zlib": "npm:browserify-zlib"
   },
   "scripts": {
     "start": "react-app-rewired start",
