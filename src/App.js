@@ -17,7 +17,7 @@ import {
   Mumbai,
 } from "@thirdweb-dev/chains";
 import { Feed, Header, Upload, User } from "./components";
-import * as LitJsSdk from "@lit-protocol/lit-node-client";
+// import * as LitJsSdk from "@lit-protocol/lit-node-client";
 import "./App.css";
 
 import { useDispatch } from "react-redux";
@@ -91,7 +91,7 @@ function App() {
         // ArbitrumGoerli,
         Mumbai,
       ]}
-      clientId={`${process.env.THIRDWEB_CLIENT_ID}`}
+      clientId={`${process.env.REACT_APP_THIRDWEB_CLIENT_ID}`}
     >
       <Container fluid="true" style={{ backgroundColor: "black" }}>
         <BrowserRouter>
