@@ -34,7 +34,7 @@ import {
 //   },
 // ]);
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <>
       <Route exact path="/" element={<Feed />} />
