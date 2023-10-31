@@ -8,11 +8,48 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
+import { Feed, Upload, User } from "./components";
+import {
+  HashRouter,
+  Route,
+  RouterProvider,
+  Routes,
+  createBrowserRouter,
+  createHashRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
+
+// const router = createHashRouter([
+//   {
+//     path: "/",
+//     element: <Feed />,
+//   },
+//   {
+//     path: "/upload",
+//     element: <Upload />,
+//   },
+//   {
+//     path: "/user/:id",
+//     element: <User />,
+//   },
+// ]);
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route exact path="/" element={<Feed />} />
+      <Route exact path="/upload" element={<Upload />} />
+      <Route exact path="/user/:id" element={<User />} />
+    </>
+  )
+);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );

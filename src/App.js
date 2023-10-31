@@ -5,7 +5,9 @@ import {
   useLocation,
   HashRouter,
   BrowserRouter,
+  createRoutesFromElements,
 } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import {
@@ -31,6 +33,23 @@ import {
   loadProvider,
   loadToken,
 } from "./store/interactions";
+
+// const router = createHashRouter([
+//   {
+//     path: "/",
+//     element: <Feed />,
+//     children: [
+//       {
+//         path: "upload",
+//         element: <Upload />,
+//       },
+//       {
+//         path: "user/:id",
+//         element: <User />,
+//       },
+//     ],
+//   },
+// ]);
 
 function App() {
   const dispatch = useDispatch();
@@ -94,14 +113,15 @@ function App() {
       clientId={`${process.env.REACT_APP_THIRDWEB_CLIENT_ID}`}
     >
       <Container fluid="true" style={{ backgroundColor: "black" }}>
-        <BrowserRouter>
-          <Header />
+        <Header />
+
+        {/* <BrowserRouter>
           <Routes>
+            <Route exact path="/" element={<Feed />} />
             <Route exact path="/upload" element={<Upload />} />
             <Route exact path="/user/:id" element={<User />} />
-            <Route exact path="/" element={<Feed />} />
           </Routes>
-        </BrowserRouter>
+        </BrowserRouter> */}
       </Container>
     </ThirdwebProvider>
   );
