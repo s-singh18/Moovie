@@ -65,7 +65,7 @@ const Header = () => {
       <Button
         variant="outline-light"
         style={{ borderColor: "#FDD600" }}
-        href="/upload"
+        href="/#/upload"
       >
         Upload
       </Button>
