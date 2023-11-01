@@ -115,13 +115,13 @@ function App() {
       <Container fluid="true" style={{ backgroundColor: "black" }}>
         <Header />
 
-        {/* <BrowserRouter>
+        {/* <HashRouter>
           <Routes>
             <Route exact path="/" element={<Feed />} />
             <Route exact path="/upload" element={<Upload />} />
             <Route exact path="/user/:id" element={<User />} />
           </Routes>
-        </BrowserRouter> */}
+        </HashRouter> */}
       </Container>
     </ThirdwebProvider>
   );

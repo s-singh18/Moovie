@@ -19,30 +19,30 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-// const router = createHashRouter([
-//   {
-//     path: "/",
-//     element: <Feed />,
-//   },
-//   {
-//     path: "/upload",
-//     element: <Upload />,
-//   },
-//   {
-//     path: "/user/:id",
-//     element: <User />,
-//   },
-// ]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Feed />,
+  },
+  {
+    path: "/upload",
+    element: <Upload />,
+  },
+  {
+    path: "/user/:id",
+    element: <User />,
+  },
+]);
 
-const router = createHashRouter(
-  createRoutesFromElements(
-    <>
-      <Route exact path="/" element={<Feed />} />
-      <Route exact path="/upload" element={<Upload />} />
-      <Route exact path="/user/:id" element={<User />} />
-    </>
-  )
-);
+// const router = createHashRouter(
+//   createRoutesFromElements(
+//     <>
+//       <Route exact path="/" element={<Feed />} />
+//       <Route exact path="/upload" element={<Upload />} />
+//       <Route exact path="/user/:id" element={<User />} />
+//     </>
+//   )
+// );
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

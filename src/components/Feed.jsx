@@ -4,6 +4,7 @@ import { Videos } from "./";
 import getIrys from "../utils/getIrys";
 import { queryFeed } from "../utils/queryLibrary";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Feed = () => {
   const [videos, setVideos] = useState([]);
@@ -29,11 +30,13 @@ const Feed = () => {
   }, [node]);
 
   return (
-    <Row>
-      <Col>
-        <Videos videos={videos} />
-      </Col>
-    </Row>
+    <Link to={"/"}>
+      <Row>
+        <Col>
+          <Videos videos={videos} />
+        </Col>
+      </Row>
+    </Link>
   );
 };
 

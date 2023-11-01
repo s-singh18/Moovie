@@ -86,7 +86,10 @@ const User = () => {
   const handleMintTier = async () => {
     try {
       const signer = await provider.getSigner();
-      const data = await moovieTierNFTContract.connect(signer).mint(tierId, 1);
+      // const data = await moovieTierNFTContract.connect(signer).mint(tierId, 1);
+      const data = await moovieTierNFTContract
+        .connect(signer)
+        .mint(tierId, 1, { value: ethers.utils.parseEther("1.0") });
       console.log(data);
     } catch (error) {
       console.log("Handle Mint Error:\n", error);
@@ -150,118 +153,120 @@ const User = () => {
   }, [node, moovieTierNFTContract]);
 
   return (
-    <Stack className="align-items-center">
-      <Row style={{ marginTop: "20px", marginBottom: "20px", width: "50%" }}>
-        <Col xs={1} style={{ marginRight: "0px", padding: "0px" }}>
-          <img
-            className="rounded-circle shadow-4-strong"
-            style={{ height: "60px", width: "60px" }}
-            alt="avatar1"
-            src="/images/m-logo.png"
-          />
-        </Col>
-        <Col
-          xs={2}
-          style={{
-            width: "40%",
-            maxWidth: "600px",
-          }}
-        >
-          <h4 className="mb-0">
-            <Link
-              style={{ color: "white", textDecoration: "none" }}
-              to={`/user/${user}`}
-            >
-              {shortenEthereumAddress(user)}
-            </Link>
-          </h4>
-        </Col>
-        <Col
-          xs={2}
-          style={{
-            width: "40%",
-            maxWidth: "600px",
-          }}
-        >
-          {!account ? (
-            <></>
-          ) : contractAccount === user ? (
-            <Form>
-              <Form.Group className="mb-2 mr-sm-2 w-50">
-                <Form.Control
-                  type="text"
-                  id="tierName"
-                  placeholder="Tier Name"
-                  value={tierName}
-                  onChange={(e) => setTierName(e.target.value)}
-                />
-                <Form.Control
-                  type="number"
-                  id="tierPrice"
-                  placeholder="Tier Price"
-                  value={tierPrice}
-                  onChange={(e) => setTierPrice(e.target.value)}
-                />
-              </Form.Group>
+    <Link to={"/user/:id"}>
+      <Stack className="align-items-center">
+        <Row style={{ marginTop: "20px", marginBottom: "20px", width: "50%" }}>
+          <Col xs={1} style={{ marginRight: "0px", padding: "0px" }}>
+            <img
+              className="rounded-circle shadow-4-strong"
+              style={{ height: "60px", width: "60px" }}
+              alt="avatar1"
+              src="/images/m-logo.png"
+            />
+          </Col>
+          <Col
+            xs={2}
+            style={{
+              width: "40%",
+              maxWidth: "600px",
+            }}
+          >
+            <h4 className="mb-0">
+              <Link
+                style={{ color: "white", textDecoration: "none" }}
+                to={`/user/${user}`}
+              >
+                {shortenEthereumAddress(user)}
+              </Link>
+            </h4>
+          </Col>
+          <Col
+            xs={2}
+            style={{
+              width: "40%",
+              maxWidth: "600px",
+            }}
+          >
+            {!account ? (
+              <></>
+            ) : contractAccount === user ? (
+              <Form>
+                <Form.Group className="mb-2 mr-sm-2 w-50">
+                  <Form.Control
+                    type="text"
+                    id="tierName"
+                    placeholder="Tier Name"
+                    value={tierName}
+                    onChange={(e) => setTierName(e.target.value)}
+                  />
+                  <Form.Control
+                    type="number"
+                    id="tierPrice"
+                    placeholder="Tier Price"
+                    value={tierPrice}
+                    onChange={(e) => setTierPrice(e.target.value)}
+                  />
+                </Form.Group>
+                <Button
+                  variant="primary"
+                  onClick={handleCreateTier}
+                  className="mb-2"
+                  style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
+                >
+                  Create Tier
+                </Button>
+              </Form>
+            ) : (
+              <></>
+            )}
+          </Col>
+        </Row>
+        <Row style={{ width: "50%" }}>
+          <Nav
+            // fill
+            variant="tabs"
+            onSelect={(selectedKey) => handleNavLinkSelect(selectedKey)}
+            defaultActiveKey="videoMainFeed"
+          >
+            <Nav.Item key="videoMainFeed">
+              <Nav.Link eventKey="videoMainFeed" style={{ color: "#FDD600" }}>
+                Videos
+              </Nav.Link>
+            </Nav.Item>
+            {console.log("Tier Ids: ", tierIds)}
+            {console.log("Account Tiers: ", tiers)}
+            {tiers &&
+              tiers.map((tier, index) => (
+                <Nav.Item key={index}>
+                  <Nav.Link eventKey={index} style={{ color: "#FDD600" }}>
+                    {tier.name}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
+          </Nav>
+        </Row>
+        <Row style={{ width: "50%" }}>
+          {showVideoMainFeed ? (
+            <Videos videos={videos ?? []} />
+          ) : !showVideoMainFeed && !showMintButton ? (
+            <Videos videos={videos ?? []} />
+          ) : showMintButton ? (
+            <>
               <Button
                 variant="primary"
-                onClick={handleCreateTier}
-                className="mb-2"
+                onClick={handleMintTier}
+                className="m-auto mt-2 w-25"
                 style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
               >
-                Create Tier
+                Mint Tier
               </Button>
-            </Form>
+            </>
           ) : (
             <></>
           )}
-        </Col>
-      </Row>
-      <Row style={{ width: "50%" }}>
-        <Nav
-          // fill
-          variant="tabs"
-          onSelect={(selectedKey) => handleNavLinkSelect(selectedKey)}
-          defaultActiveKey="videoMainFeed"
-        >
-          <Nav.Item key="videoMainFeed">
-            <Nav.Link eventKey="videoMainFeed" style={{ color: "#FDD600" }}>
-              Videos
-            </Nav.Link>
-          </Nav.Item>
-          {console.log("Tier Ids: ", tierIds)}
-          {console.log("Account Tiers: ", tiers)}
-          {tiers &&
-            tiers.map((tier, index) => (
-              <Nav.Item key={index}>
-                <Nav.Link eventKey={index} style={{ color: "#FDD600" }}>
-                  {tier.name}
-                </Nav.Link>
-              </Nav.Item>
-            ))}
-        </Nav>
-      </Row>
-      <Row style={{ width: "50%" }}>
-        {showVideoMainFeed ? (
-          <Videos videos={videos ?? []} />
-        ) : !showVideoMainFeed && !showMintButton ? (
-          <Videos videos={videos ?? []} />
-        ) : showMintButton ? (
-          <>
-            <Button
-              variant="primary"
-              onClick={handleMintTier}
-              className="m-auto mt-2 w-25"
-              style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
-            >
-              Mint Tier
-            </Button>
-          </>
-        ) : (
-          <></>
-        )}
-      </Row>
-    </Stack>
+        </Row>
+      </Stack>
+    </Link>
   );
 };
 

@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadBalance } from "../store/interactions.js";
 import { storeUpdate, storeUpdateTier } from "../utils/storeVideoTx.js";
 import { shortenEthereumAddress } from "../utils/shortenEthereumAddress.js";
+import { Link } from "react-router-dom";
 
 const tiers = ["Tier1", "Tier2", "Tier3"];
 
@@ -189,113 +190,114 @@ const Upload = () => {
   }, [node, moovieTierNFTContract]);
 
   return (
-    <div className="h-100 w-100">
-      <Stack className="mt-4 align-items-center h-100 w-100">
-        {account ? (
-          <div>
+    <Link to={"/upload"}>
+      <div className="h-100 w-100">
+        <Stack className="mt-4 align-items-center h-100 w-100">
+          {account ? (
             <div>
-              <div style={{ padding: "" }}>
-                <h3 style={{ color: "white" }}>Video Upload</h3>
-              </div>
+              <div>
+                <div style={{ padding: "" }}>
+                  <h3 style={{ color: "white" }}>Video Upload</h3>
+                </div>
 
-              <p>Account connected: {shortenEthereumAddress(account)}</p>
-              <Row>
-                <Col>
-                  <p>Node balance: {balance}</p>
-                </Col>
-                <Col>
-                  <Form>
-                    <Form.Group className="mb-2 mr-sm-2 w-50">
-                      <Form.Label
-                        style={{ color: "white" }}
-                        htmlFor="fundAmount"
-                        className="sr-only"
+                <p>Account connected: {shortenEthereumAddress(account)}</p>
+                <Row>
+                  <Col>
+                    <p>Node balance: {balance}</p>
+                  </Col>
+                  <Col>
+                    <Form>
+                      <Form.Group className="mb-2 mr-sm-2 w-50">
+                        <Form.Label
+                          style={{ color: "white" }}
+                          htmlFor="fundAmount"
+                          className="sr-only"
+                        >
+                          Amount
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="fundAmountInput"
+                          placeholder="Fund Amount"
+                          value={fundAmount}
+                          onChange={(e) => setFundAmount(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Button
+                        variant="primary"
+                        onClick={handleFund}
+                        className="mb-2"
+                        style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
                       >
-                        Amount
-                      </Form.Label>
-                      <Form.Control
-                        type="text"
-                        id="fundAmountInput"
-                        placeholder="Fund Amount"
-                        value={fundAmount}
-                        onChange={(e) => setFundAmount(e.target.value)}
-                      />
-                    </Form.Group>
-                    <Button
-                      variant="primary"
-                      onClick={handleFund}
-                      className="mb-2"
-                      style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
-                    >
-                      Fund
-                    </Button>
-                    <Button
-                      variant="outline-light"
-                      onClick={handleWithdraw}
-                      className="mb-2"
-                      style={{ color: "#FDD600" }}
-                    >
-                      Withdraw
-                    </Button>
-                  </Form>
-                </Col>
-              </Row>
-            </div>
-            <Form>
-              <Form.Group className="mb-2" controlId="fileCost">
-                <Form.Label style={{ color: "white" }} column sm="2">
-                  Price
-                </Form.Label>
-                <Col sm="10">
+                        Fund
+                      </Button>
+                      <Button
+                        variant="outline-light"
+                        onClick={handleWithdraw}
+                        className="mb-2"
+                        style={{ color: "#FDD600" }}
+                      >
+                        Withdraw
+                      </Button>
+                    </Form>
+                  </Col>
+                </Row>
+              </div>
+              <Form>
+                <Form.Group className="mb-2" controlId="fileCost">
+                  <Form.Label style={{ color: "white" }} column sm="2">
+                    Price
+                  </Form.Label>
+                  <Col sm="10">
+                    <Form.Control
+                      style={{ color: "white" }}
+                      plaintext
+                      readOnly
+                      value={price}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group className="mb-2" controlId="fileInput">
                   <Form.Control
-                    style={{ color: "white" }}
-                    plaintext
-                    readOnly
-                    value={price}
+                    type="file"
+                    // onChange={(e) => setSelectedFile(e.target.files[0])}
+                    onChange={handleFileChange}
                   />
-                </Col>
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="fileInput">
-                <Form.Control
-                  type="file"
-                  // onChange={(e) => setSelectedFile(e.target.files[0])}
-                  onChange={handleFileChange}
-                />
-              </Form.Group>
+                </Form.Group>
 
-              <Form.Group className="mb-2" controlId="titleInput">
-                <Form.Control
-                  type="text"
-                  placeholder="Enter a title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </Form.Group>
+                <Form.Group className="mb-2" controlId="titleInput">
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter a title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </Form.Group>
 
-              <Form.Group
-                className="mb-2"
-                controlId="tierInput"
-                onChange={(e) => handleTier(e.target.value)}
-              >
-                <Form.Select>
-                  <option value="">Select Tier</option>
-                  {console.log("Tier: ", tier)}
-                  {tiers &&
-                    tiers.map((tier, index) => (
-                      <option key={tierIds[index]} value={index}>
-                        {tier.name}
-                      </option>
-                    ))}
-                </Form.Select>
-              </Form.Group>
-              <Button
-                style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
-                variant="primary"
-                onClick={uploadVideo}
-              >
-                Upload
-              </Button>
-              {/* <ClipLoader
+                <Form.Group
+                  className="mb-2"
+                  controlId="tierInput"
+                  onChange={(e) => handleTier(e.target.value)}
+                >
+                  <Form.Select>
+                    <option value="">Select Tier</option>
+                    {console.log("Tier: ", tier)}
+                    {tiers &&
+                      tiers.map((tier, index) => (
+                        <option key={tierIds[index]} value={index}>
+                          {tier.name}
+                        </option>
+                      ))}
+                  </Form.Select>
+                </Form.Group>
+                <Button
+                  style={{ backgroundColor: "#FDD600", color: "#FDD600" }}
+                  variant="primary"
+                  onClick={uploadVideo}
+                >
+                  Upload
+                </Button>
+                {/* <ClipLoader
                 color={"#FDD600"}
                 loading={uploading}
                 size={150}
@@ -307,13 +309,14 @@ const Upload = () => {
                   borderColor: "red",
                 }}
               /> */}
-            </Form>
-          </div>
-        ) : (
-          <p>Account not connected</p>
-        )}
-      </Stack>
-    </div>
+              </Form>
+            </div>
+          ) : (
+            <p>Account not connected</p>
+          )}
+        </Stack>
+      </div>
+    </Link>
   );
 };
 
