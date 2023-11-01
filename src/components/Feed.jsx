@@ -30,13 +30,11 @@ const Feed = () => {
   }, [node]);
 
   return (
-    <Link to={"/"}>
-      <Row>
-        <Col>
-          <Videos videos={videos} />
-        </Col>
-      </Row>
-    </Link>
+    <Row>
+      <Col>
+        <Videos videos={videos} />
+      </Col>
+    </Row>
   );
 };
 
