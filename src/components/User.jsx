@@ -49,11 +49,13 @@ const User = () => {
     account && user === account.toLowerCase()
   );
   const [storedRootTx, setStoredRootTx] = useState(
-    localStorage.getItem("root-tx")
+    "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
   );
+  // localStorage.getItem("root-tx")
   const [storedPrevTx, setStoredPrevTx] = useState(
-    localStorage.getItem("prev-tx")
+    "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
   );
+  // localStorage.getItem("prev-tx")
 
   console.log("User is account", userIsAccount);
 
