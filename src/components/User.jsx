@@ -56,7 +56,8 @@ const User = () => {
     "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
   );
   // localStorage.getItem("prev-tx")
-
+  console.log("Account: ", account);
+  console.log("User: ", user);
   console.log("User is account", userIsAccount);
 
   const handleNavLinkSelect = async (key) => {
