@@ -10,11 +10,17 @@ const Feed = () => {
   const [videos, setVideos] = useState([]);
   const node = useSelector((state) => state.irys.node);
   console.log("Node: ", node);
+  const [storedRootTx, setStoredRootTx] = useState(
+    localStorage.getItem("root-tx")
+  );
+  const [storedPrevTx, setStoredPrevTx] = useState(
+    localStorage.getItem("prev-tx")
+  );
 
   const getVideos = async (rootTx = null, prevTx = null) => {
     if (rootTx === null && prevTx === null) {
-      rootTx = localStorage.getItem("root-tx");
-      prevTx = localStorage.getItem("prev-tx");
+      rootTx = storedRootTx;
+      prevTx = storedPrevTx;
     }
     const videos = await queryFeed(node, rootTx, prevTx);
     setVideos(videos);

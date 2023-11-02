@@ -48,6 +48,13 @@ const User = () => {
   const [userIsAccount, setUserIsAccount] = useState(
     account && user === account.toLowerCase()
   );
+  const [storedRootTx, setStoredRootTx] = useState(
+    localStorage.getItem("root-tx")
+  );
+  const [storedPrevTx, setStoredPrevTx] = useState(
+    localStorage.getItem("prev-tx")
+  );
+
   console.log("User is account", userIsAccount);
 
   const handleNavLinkSelect = async (key) => {
@@ -135,8 +142,8 @@ const User = () => {
 
   const getVideos = async (rootTx = null, prevTx = null) => {
     if (rootTx === null && prevTx === null) {
-      rootTx = localStorage.getItem("root-tx");
-      prevTx = localStorage.getItem("prev-tx");
+      rootTx = storedRootTx;
+      prevTx = storedPrevTx;
     }
     const videos = await queryUserFeed(node, user, rootTx, prevTx);
     setVideos(videos);
