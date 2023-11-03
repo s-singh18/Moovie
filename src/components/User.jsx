@@ -49,13 +49,13 @@ const User = () => {
     account && user === account.toLowerCase()
   );
   const [storedRootTx, setStoredRootTx] = useState(
-    "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
+    localStorage.getItem("root-tx")
   );
-  // localStorage.getItem("root-tx")
+  // "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
   const [storedPrevTx, setStoredPrevTx] = useState(
-    "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
+    localStorage.getItem("prev-tx")
   );
-  // localStorage.getItem("prev-tx")
+  // "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
   console.log("Account: ", account.toLowerCase());
   console.log("User: ", user);
   console.log("User is account", userIsAccount);
@@ -97,6 +97,7 @@ const User = () => {
     try {
       const signer = await provider.getSigner();
       // const data = await moovieTierNFTContract.connect(signer).mint(tierId, 1);
+      // moovieTierNFTContract.tiers(tierId))[1]
       const data = await moovieTierNFTContract
         .connect(signer)
         .mint(tierId, 1, { value: ethers.utils.parseEther("0.001") });
