@@ -12,13 +12,13 @@ const Feed = () => {
   console.log("Node: ", node);
 
   const [storedRootTx, setStoredRootTx] = useState(
-    "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
+    localStorage.getItem("root-tx")
   );
-  // localStorage.getItem("root-tx")
+  // "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
   const [storedPrevTx, setStoredPrevTx] = useState(
-    "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
+    localStorage.getItem("prev-tx")
   );
-  // localStorage.getItem("prev-tx")
+  //"ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
   console.log("Prev-tx: ", storedPrevTx);
 
   const getVideos = async (rootTx = null, prevTx = null) => {

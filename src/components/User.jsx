@@ -56,7 +56,7 @@ const User = () => {
     "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
   );
   // localStorage.getItem("prev-tx")
-  console.log("Account: ", account);
+  console.log("Account: ", account.toLowerCase());
   console.log("User: ", user);
   console.log("User is account", userIsAccount);
 
@@ -99,7 +99,7 @@ const User = () => {
       // const data = await moovieTierNFTContract.connect(signer).mint(tierId, 1);
       const data = await moovieTierNFTContract
         .connect(signer)
-        .mint(tierId, 1, { value: ethers.utils.parseEther("1.0") });
+        .mint(tierId, 1, { value: ethers.utils.parseEther("0.001") });
       console.log(data);
     } catch (error) {
       console.log("Handle Mint Error:\n", error);
@@ -116,7 +116,7 @@ const User = () => {
           .connect(signer)
           .createTier(ethTierPrice, tierName);
       }
-      window.location.href = `/user/${user}`;
+      window.location.href = `/#/user/${user}`;
     } catch (error) {
       console.log("Create tier error", error);
     }
