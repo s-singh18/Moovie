@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { queryTransaction } from "./queryLibrary";
 
 // Stores the root transaction and returns the transaction id
@@ -79,6 +80,9 @@ export const storeUpdateTier = async (
     let rootTx = tier.oldTransactionId;
     let prevTx = tier.newTransactionId;
 
+    const tierPrice = ethers.utils.formatEther(tier[1]);
+    const tierCreator = tier[0];
+
     if (rootTx === "" && prevTx === "") {
       let transacId = storeRootTier(
         txId,
@@ -97,6 +101,17 @@ export const storeUpdateTier = async (
         { name: "moovies", value: moovies },
         { name: "root-tx", value: rootTx },
         { name: "prev-tx", value: prevTx },
+        // Defining UDL
+        {
+          name: "License",
+          value: "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8",
+        },
+        { name: "License-Fee", value: "One-Time-" + tierPrice },
+        { name: "Currency", value: "MATIC" },
+        {
+          name: "Payment-Address",
+          value: tierCreator,
+        },
       ];
       const tx = await irys.upload("", { tags });
       await moovieTierNFTContract
