@@ -1,7 +1,15 @@
 {
   "80001": {
     "moovieTierNFT": {
-      "address": "0xBC8Cd4fD4dC3186810F1C017B3d755E5EbC062C7"
+      "address": "0xaC9AFEf5d351D937526f61FFCd9e6818D7743fbc"
+    }
+  },
+  "prevAddress": {
+    "moovieTierNFT": {
+      "address": [
+        "0xBC8Cd4fD4dC3186810F1C017B3d755E5EbC062C7",
+        "0x9EF1aFaF0571222C5C89A988224Bddfa82E6D028"
+      ]
     }
   }
 }

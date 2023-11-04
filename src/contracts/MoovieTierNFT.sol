@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.21;
+pragma solidity ^0.8.21;
 
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
@@ -63,8 +63,24 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
     }
 
     function mint(uint256 tierID, uint256 amount) external payable {
-        require(tiers[tierID].creator != address(0), "tierID does not exist");
-        // require(tiers[tierID].price * amount <= msg.value, "Insufficient mint price sent");
+        require(tiers[tierID].creator != address(0), "Tier ID does not exist");
+        require(
+            tiers[tierID].price * amount <= msg.value,
+            "Insufficient mint price sent"
+        );
+        require(
+            balanceOf(msg.sender, tierID) == 0,
+            "NFT balance should be 0 to mint"
+        );
+
+        address payable tierCreator = payable(tiers[tierID].creator);
+        uint256 totalPrice = tiers[tierID].price * amount;
+
+        // Ensure the tier creator's address is valid.
+        require(tierCreator != address(0), "Invalid tier creator address");
+
+        // Send the payment to the tier creator using transfer().
+        tierCreator.transfer(totalPrice);
 
         _mint(msg.sender, tierID, amount, "");
     }
