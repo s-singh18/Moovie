@@ -36,7 +36,7 @@ const User = () => {
   const [tiers, setTiers] = useState([]);
   const [tierIds, setTierIds] = useState([]);
 
-  const contractAccount = account ? account.toLowerCase() : "";
+  // const contractAccount = account ? account.toLowerCase() : "";
   const location = useLocation();
   const currentRoute = location.pathname;
   const myArray = currentRoute.split("/");
@@ -56,7 +56,7 @@ const User = () => {
     localStorage.getItem("prev-tx")
   );
   // "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
-  console.log("Account: ", account.toLowerCase());
+  console.log("Account: ", account);
   console.log("User: ", user);
   console.log("User is account", userIsAccount);
 
@@ -97,10 +97,12 @@ const User = () => {
     try {
       const signer = await provider.getSigner();
       // const data = await moovieTierNFTContract.connect(signer).mint(tierId, 1);
-      // moovieTierNFTContract.tiers(tierId))[1]
+      const tier = await moovieTierNFTContract.tiers(tierId);
+      const tierPrice = ethers.utils.formatEther(tier[1]);
+      console.log("Tier Price ", tierPrice);
       const data = await moovieTierNFTContract
         .connect(signer)
-        .mint(tierId, 1, { value: ethers.utils.parseEther("0.001") });
+        .mint(tierId, 1, { value: ethers.utils.parseEther(`${tierPrice}`) });
       console.log(data);
     } catch (error) {
       console.log("Handle Mint Error:\n", error);
@@ -199,7 +201,7 @@ const User = () => {
         >
           {!account ? (
             <></>
-          ) : contractAccount === user ? (
+          ) : account === user ? (
             <Form>
               <Form.Group className="mb-2 mr-sm-2 w-50">
                 <Form.Control
