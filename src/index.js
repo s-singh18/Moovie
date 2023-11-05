@@ -18,6 +18,11 @@ import {
   createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import {
+  LivepeerConfig,
+  createReactClient,
+  studioProvider,
+} from "@livepeer/react";
 
 // const router = createBrowserRouter([
 //   {
@@ -44,13 +49,21 @@ const router = createHashRouter(
   )
 );
 
+const livepeerClient = createReactClient({
+  provider: studioProvider({
+    apiKey: process.env.LIVEPEER_API_KEY,
+  }),
+});
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-      <RouterProvider router={router} />
-    </Provider>
+    <LivepeerConfig client={livepeerClient}>
+      <Provider store={store}>
+        <App />
+        <RouterProvider router={router} />
+      </Provider>
+    </LivepeerConfig>
   </React.StrictMode>
 );
 

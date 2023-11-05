@@ -49,13 +49,14 @@ const User = () => {
     account && user === account.toLowerCase()
   );
   const [storedRootTx, setStoredRootTx] = useState(
-    localStorage.getItem("root-tx")
+    "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
+    // localStorage.getItem("root-tx")
   );
-  // "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
+
   const [storedPrevTx, setStoredPrevTx] = useState(
-    localStorage.getItem("prev-tx")
+    "Vx2_fMgYuL8eYYM0N6Qs2VQNRGpFMR-L2HxRYU-ix_I"
+    // localStorage.getItem("prev-tx")
   );
-  // "ZqVE29L0Gnit8PpM0madUk9d2d5ah_xxxCh4OoxSiDQ"
   console.log("Account: ", account);
   console.log("User: ", user);
   console.log("User is account", userIsAccount);
@@ -119,7 +120,7 @@ const User = () => {
           .connect(signer)
           .createTier(ethTierPrice, tierName);
       }
-      window.location.href = `/#/user/${user}`;
+      window.location.reload();
     } catch (error) {
       console.log("Create tier error", error);
     }
@@ -160,10 +161,11 @@ const User = () => {
     try {
       getVideos();
       getCreatorTierIDs();
+      setUserIsAccount(user === account.toLowerCase());
     } catch (error) {
       console.log("Error loading video data", error);
     }
-  }, [node, moovieTierNFTContract]);
+  }, [node, moovieTierNFTContract, account]);
 
   return (
     <Stack className="align-items-center">
@@ -201,7 +203,7 @@ const User = () => {
         >
           {!account ? (
             <></>
-          ) : account === user ? (
+          ) : userIsAccount ? (
             <Form>
               <Form.Group className="mb-2 mr-sm-2 w-50">
                 <Form.Control

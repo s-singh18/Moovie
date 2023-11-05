@@ -128,7 +128,7 @@ const Upload = () => {
       console.log("Updated list tx: ", txId);
 
       alert(`File uploaded ==> https://gateway.irys.xyz/${receipt.id}`);
-      window.location.href = "/#/upload";
+      window.location.reload();
       return receipt;
     } catch (e) {
       setUploading(false);
