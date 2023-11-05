@@ -5,6 +5,9 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 
 contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
+    string public feedRootTx = "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris";
+    string public feedPrevTx = "Vx2_fMgYuL8eYYM0N6Qs2VQNRGpFMR-L2HxRYU-ix_I";
+
     struct Tier {
         address creator;
         uint256 price;
@@ -99,6 +102,14 @@ contract MoovieTierNFT is ERC1155Supply, ERC1155URIStorage {
         uint256 price
     ) external onlyTierOwner(tierID) {
         tiers[tierID].price = price;
+    }
+
+    function changeFeedTx(
+        string memory _feedRootTx,
+        string memory _feedPrevTx
+    ) public {
+        feedRootTx = _feedRootTx;
+        feedPrevTx = _feedPrevTx;
     }
 
     function changeTransactionIds(

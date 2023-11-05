@@ -2,23 +2,35 @@ import { ethers } from "ethers";
 import { queryTransaction } from "./queryLibrary";
 
 // Stores the root transaction and returns the transaction id
-export const storeRoot = async (txId, irys) => {
+export const storeRoot = async (txId, irys, moovieTierNFTContract, signer) => {
   const tags = [
     { name: "Content-Type", value: "text/plain" },
     { name: "application-id", value: "Moovie" },
     { name: "moovies", value: txId },
   ];
   const tx = await irys.upload("", { tags });
-  localStorage.setItem("root-tx", tx.id);
-  localStorage.setItem("prev-tx", tx.id);
+  await moovieTierNFTContract.connect(signer).changeFeedTx(tx.id, tx.id);
+
+  // localStorage.setItem("root-tx", tx.id);
+  // localStorage.setItem("prev-tx", tx.id);
 
   return tx.id;
 };
 
-export const storeUpdate = async (txId, irys, node) => {
+export const storeUpdate = async (
+  txId,
+  irys,
+  node,
+  moovieTierNFTContract,
+  provider
+) => {
+  const signer = await provider.getSigner();
   try {
-    const rootTx = localStorage.getItem("root-tx");
-    const prevTx = localStorage.getItem("prev-tx");
+    // const rootTx = localStorage.getItem("root-tx");
+    // const prevTx = localStorage.getItem("prev-tx");
+
+    const rootTx = await moovieTierNFTContract.feedRootTx();
+    const prevTx = await moovieTierNFTContract.feedPrevTx();
 
     const results = await queryTransaction(node, [prevTx], "text/plain");
     const moovies = results[0]["tags"][2]["value"] + ", " + txId;
@@ -32,11 +44,14 @@ export const storeUpdate = async (txId, irys, node) => {
     ];
 
     const tx = await irys.upload("", { tags });
-    localStorage.setItem("prev-tx", tx.id);
+    const result = await moovieTierNFTContract
+      .connect(signer)
+      .changeFeedTx(rootTx, tx.id);
+
     return tx.id;
   } catch (error) {
     console.log("Unable to find root. Creating a new root...");
-    storeRoot(txId, irys);
+    storeRoot(txId, irys, moovieTierNFTContract, signer);
   }
 };
 

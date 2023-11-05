@@ -148,13 +148,17 @@ const User = () => {
   };
 
   const getVideos = async (rootTx = null, prevTx = null) => {
-    if (rootTx === null && prevTx === null) {
-      rootTx = storedRootTx;
-      prevTx = storedPrevTx;
+    try {
+      if (rootTx === null && prevTx === null) {
+        rootTx = await moovieTierNFTContract.feedRootTx();
+        prevTx = await moovieTierNFTContract.feedPrevTx();
+      }
+      const videos = await queryUserFeed(node, user, rootTx, prevTx);
+      setVideos(videos);
+      return videos;
+    } catch (error) {
+      console.log("Get Videos Error: ", error);
     }
-    const videos = await queryUserFeed(node, user, rootTx, prevTx);
-    setVideos(videos);
-    return videos;
   };
 
   useEffect(() => {

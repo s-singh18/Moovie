@@ -114,7 +114,13 @@ const Upload = () => {
       let txId;
       console.log("Tier compare: ", tier);
       tier === ""
-        ? (txId = await storeUpdate(receipt.id, irys, node))
+        ? (txId = await storeUpdate(
+            receipt.id,
+            irys,
+            node,
+            moovieTierNFTContract,
+            provider
+          ))
         : (txId = await storeUpdateTier(
             receipt.id,
             tierId,

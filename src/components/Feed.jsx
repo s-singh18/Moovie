@@ -9,7 +9,9 @@ import { Link } from "react-router-dom";
 const Feed = () => {
   const [videos, setVideos] = useState([]);
   const node = useSelector((state) => state.irys.node);
-  console.log("Node: ", node);
+  const moovieTierNFTContract = useSelector(
+    (state) => state.moovieTierNFT.contract
+  );
 
   const [storedRootTx, setStoredRootTx] = useState(
     "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
@@ -23,13 +25,17 @@ const Feed = () => {
   console.log("Prev-tx: ", storedPrevTx);
 
   const getVideos = async (rootTx = null, prevTx = null) => {
-    if (rootTx === null && prevTx === null) {
-      rootTx = storedRootTx;
-      prevTx = storedPrevTx;
+    try {
+      if (rootTx === null && prevTx === null) {
+        rootTx = await moovieTierNFTContract.feedRootTx();
+        prevTx = await moovieTierNFTContract.feedPrevTx();
+      }
+      const videos = await queryFeed(node, rootTx, prevTx);
+      setVideos(videos);
+      return videos;
+    } catch (error) {
+      console.log("Get Videos Error ", error);
     }
-    const videos = await queryFeed(node, rootTx, prevTx);
-    setVideos(videos);
-    return videos;
   };
 
   useEffect(() => {
@@ -38,7 +44,7 @@ const Feed = () => {
     } catch (error) {
       console.log("Error loading video data", error);
     }
-  }, [node]);
+  }, [node, moovieTierNFTContract]);
 
   return (
     <Row>
