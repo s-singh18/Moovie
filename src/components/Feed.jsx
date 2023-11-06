@@ -13,17 +13,6 @@ const Feed = () => {
     (state) => state.moovieTierNFT.contract
   );
 
-  const [storedRootTx, setStoredRootTx] = useState(
-    "RwIwPtCCMLmL660Oh_9aH__VZsQLk4SmLEfK5QtFris"
-    // localStorage.getItem("root-tx")
-  );
-
-  const [storedPrevTx, setStoredPrevTx] = useState(
-    "Vx2_fMgYuL8eYYM0N6Qs2VQNRGpFMR-L2HxRYU-ix_I"
-    // localStorage.getItem("prev-tx")
-  );
-  console.log("Prev-tx: ", storedPrevTx);
-
   const getVideos = async (rootTx = null, prevTx = null) => {
     try {
       if (rootTx === null && prevTx === null) {
