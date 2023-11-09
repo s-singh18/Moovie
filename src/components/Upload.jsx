@@ -100,11 +100,24 @@ const Upload = () => {
     console.log("Video upload user", account);
     console.log(`Uploading ${selectedFile.name} with title: ${title}`);
 
+    const tierPrice = tier ? ethers.utils.formatEther(tier[1]) : "0";
+
     const tags = [
       { name: "Content-Type", value: "video/mp4" },
       { name: "application-id", value: "Moovie" },
       { name: "title", value: title },
       { name: "user", value: account },
+      // Defining UDL
+      {
+        name: "License",
+        value: "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8",
+      },
+      { name: "License-Fee", value: "One-Time-" + tierPrice },
+      { name: "Currency", value: "MATIC" },
+      {
+        name: "Payment-Address",
+        value: account,
+      },
     ];
 
     try {
@@ -134,7 +147,7 @@ const Upload = () => {
       console.log("Updated list tx: ", txId);
 
       alert(`File uploaded ==> https://gateway.irys.xyz/${receipt.id}`);
-      window.location.reload();
+      // window.location.reload();
       return receipt;
     } catch (e) {
       setUploading(false);
@@ -146,12 +159,15 @@ const Upload = () => {
     try {
       setUploading(true);
       console.log("Node balance: ", nodeBalance);
-      if (nodeBalance < price) {
-        const fundAmount = price;
+      const nodeBalanceFloat = parseFloat(nodeBalance);
+      const priceFloat = parseFloat(price);
+      if (nodeBalanceFloat < priceFloat) {
+        const fundAmount = priceFloat - nodeBalanceFloat;
         await handleFund(fundAmount);
       }
       const receipt = await uploadVideo();
       console.log("Reciept: ", receipt);
+      setUploading(false);
     } catch (error) {
       setUploading(false);
       alert(`Fund node and upload video error... \n${error}`);
@@ -302,7 +318,7 @@ const Upload = () => {
               >
                 Upload
               </Button>
-              {/* <ClipLoader
+              <ClipLoader
                 color={"#FDD600"}
                 loading={uploading}
                 size={150}
@@ -313,7 +329,7 @@ const Upload = () => {
                   margin: "0 auto",
                   borderColor: "red",
                 }}
-              /> */}
+              />
             </Form>
           </div>
         ) : (
